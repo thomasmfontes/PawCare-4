@@ -170,10 +170,10 @@ Para rodar o PawCare em sua máquina local de desenvolvimento e testar no seu ce
 
 ## 🎓 Contexto de Desenvolvimento
 
-* **Instituição:** FIAP (Faculdade de Informática e Administração Paulista)
-* **Curso:** Challenge 1 - Desenvolvimento Mobile Avançado
-* **Desenvolvedor:** Thomas Fontes (Aluno FIAP e tutor orgulhoso da Luna)
-* **Objetivos Alcançados:** 
+* **Instituição:** FIAP
+* **Curso:** Análise e Desenvolvimento de Sistemas
+* **Integrantes:** Thomas Fontes; Gabriel Maciel; Matheus Molina; Vitória Rodrigues; Augusto Bonomo
+* **Objetivos:**
   * Integração completa de navegação em abas aninhada e dinâmica via Expo Router.
   * Criação de UI premium baseada em paleta de cores própria e responsividade de tela.
   * Tipagem estrita de dados estáticos para garantir segurança contra falhas em produção.
