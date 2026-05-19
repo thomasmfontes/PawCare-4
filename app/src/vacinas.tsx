@@ -1,29 +1,16 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import {
-  View,
-  Text,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
-  SafeAreaView,
-  TextInput,
-  Alert,
-  KeyboardAvoidingView,
-  Platform,
-  ActivityIndicator,
-} from 'react-native';
+import { View, Text, ScrollView, StyleSheet, TouchableOpacity, TextInput, Alert, KeyboardAvoidingView, Platform, ActivityIndicator } from 'react-native';
+import Constants from 'expo-constants';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Colors from '../../constants/Colors';
 import { vaccines as mockVaccines } from '../../constants/MockData';
 
-// ─── Types ──────────────────────────────────────────────────────────────────
-
 interface VaccineEntry {
   id: string;
   name: string;
-  date: string;      // data de aplicação DD/MM/AAAA (pode ser vazia)
-  nextDate: string;  // próxima dose DD/MM/AAAA
+  date: string;
+  nextDate: string;
   status: 'done' | 'pending' | 'overdue';
   observacao: string;
 }
@@ -37,8 +24,6 @@ interface FormState {
   observacao: string;
 }
 
-// ─── Constants ───────────────────────────────────────────────────────────────
-
 const STORAGE_KEY = '@pawcare:vaccines';
 
 const EMPTY_FORM: FormState = {
@@ -47,8 +32,6 @@ const EMPTY_FORM: FormState = {
   proximaDose: '',
   observacao: '',
 };
-
-// ─── Helpers ─────────────────────────────────────────────────────────────────
 
 function parseBRDate(dateStr: string): Date {
   const [day, month, year] = dateStr.split('/');
@@ -90,8 +73,6 @@ function mockToEntry(m: typeof mockVaccines[0]): VaccineEntry {
   };
 }
 
-// ─── Sub-components ──────────────────────────────────────────────────────────
-
 function StatusBadge({ status }: { status: VaccineEntry['status'] }) {
   const config = {
     done: { label: 'Realizada', color: Colors.success, bg: Colors.success + '18', icon: 'checkmark-circle' as const },
@@ -117,8 +98,8 @@ function VaccineCard({ item, onDelete }: VaccineCardProps) {
 
   const borderColor =
     item.status === 'done' ? Colors.success :
-    item.status === 'overdue' ? Colors.danger :
-    Colors.warning;
+      item.status === 'overdue' ? Colors.danger :
+        Colors.warning;
 
   function confirmDelete() {
     Alert.alert(
@@ -182,8 +163,6 @@ function VaccineCard({ item, onDelete }: VaccineCardProps) {
     </TouchableOpacity>
   );
 }
-
-// ─── Form component ──────────────────────────────────────────────────────────
 
 interface AddFormProps {
   form: FormState;
@@ -257,8 +236,6 @@ function AddForm({ form, onChange, onAdd, onCancel }: AddFormProps) {
   );
 }
 
-// ─── Main screen ─────────────────────────────────────────────────────────────
-
 export default function VacinasScreen() {
   const [vaccines, setVaccines] = useState<VaccineEntry[]>([]);
   const [loading, setLoading] = useState(true);
@@ -266,7 +243,6 @@ export default function VacinasScreen() {
   const [form, setForm] = useState<FormState>(EMPTY_FORM);
   const [filter, setFilter] = useState<FilterType>('all');
 
-  // Load from AsyncStorage on mount
   useEffect(() => {
     loadVaccines();
   }, []);
@@ -277,13 +253,11 @@ export default function VacinasScreen() {
       if (raw) {
         setVaccines(JSON.parse(raw));
       } else {
-        // First launch: seed with mock data
         const seed = mockVaccines.map(mockToEntry);
         setVaccines(seed);
         await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(seed));
       }
     } catch {
-      // Fallback to mock data if storage fails
       setVaccines(mockVaccines.map(mockToEntry));
     } finally {
       setLoading(false);
@@ -346,7 +320,6 @@ export default function VacinasScreen() {
     persistVaccines(updated);
   }
 
-  // Computed values
   const filtered = vaccines.filter((v) => filter === 'all' || v.status === filter);
 
   const counts = {
@@ -364,8 +337,7 @@ export default function VacinasScreen() {
   ];
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      {/* Header */}
+    <View style={styles.safeArea}>
       <View style={styles.header}>
         <View>
           <Text style={styles.headerTitle}>Vacinas</Text>
@@ -399,7 +371,6 @@ export default function VacinasScreen() {
               keyboardShouldPersistTaps="handled"
               contentContainerStyle={styles.scrollContent}
             >
-              {/* Form */}
               {showForm && (
                 <AddForm
                   form={form}
@@ -409,7 +380,6 @@ export default function VacinasScreen() {
                 />
               )}
 
-              {/* Summary */}
               <View style={styles.summaryRow}>
                 <View style={[styles.summaryCard, { backgroundColor: '#E6FBF4' }]}>
                   <Text style={[styles.summaryValue, { color: Colors.success }]}>{counts.done}</Text>
@@ -425,7 +395,6 @@ export default function VacinasScreen() {
                 </View>
               </View>
 
-              {/* Filters */}
               <ScrollView
                 horizontal
                 showsHorizontalScrollIndicator={false}
@@ -448,7 +417,6 @@ export default function VacinasScreen() {
                 ))}
               </ScrollView>
 
-              {/* Vaccine list */}
               {filtered.length === 0 ? (
                 <View style={styles.emptyState}>
                   <Ionicons name="checkmark-done-circle-outline" size={60} color={Colors.border} />
@@ -477,11 +445,9 @@ export default function VacinasScreen() {
           )}
         </View>
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </View>
   );
 }
-
-// ─── Styles ──────────────────────────────────────────────────────────────────
 
 const styles = StyleSheet.create({
   flex: { flex: 1 },
@@ -489,54 +455,53 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: Colors.darkBlue,
+    paddingTop: Constants.statusBarHeight,
   },
 
-  // Header
   header: {
     backgroundColor: Colors.darkBlue,
     paddingHorizontal: 20,
     paddingTop: 16,
-    paddingBottom: 24,
+    height: 110,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
   },
   headerTitle: {
-    fontSize: 22,
-    fontWeight: '700',
+    fontSize: 24,
+    fontWeight: '800',
     color: Colors.white,
+    letterSpacing: -0.3,
   },
   headerSubtitle: {
     fontSize: 13,
-    color: 'rgba(255,255,255,0.65)',
+    color: 'rgba(255,255,255,0.6)',
     marginTop: 2,
   },
   headerBtn: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: 'rgba(255,255,255,0.18)',
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: 'rgba(255,255,255,0.12)',
     alignItems: 'center',
     justifyContent: 'center',
   },
   headerBtnActive: {
-    backgroundColor: Colors.danger + 'CC',
+    backgroundColor: Colors.danger + 'BB',
   },
 
-  // Container
   container: {
     flex: 1,
     backgroundColor: Colors.background,
-    borderTopLeftRadius: 24,
-    borderTopRightRadius: 24,
-    marginTop: -12,
+    borderTopLeftRadius: 28,
+    borderTopRightRadius: 28,
+    marginTop: -16,
     overflow: 'hidden',
   },
   scrollContent: {
     paddingTop: 20,
   },
 
-  // Loading
   loadingWrapper: {
     flex: 1,
     alignItems: 'center',
@@ -549,50 +514,50 @@ const styles = StyleSheet.create({
     color: Colors.textLight,
   },
 
-  // Form card
   formCard: {
     backgroundColor: Colors.white,
     marginHorizontal: 20,
     marginBottom: 16,
-    borderRadius: 16,
+    borderRadius: 20,
     padding: 18,
     shadowColor: Colors.primary,
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.12,
-    shadowRadius: 12,
-    elevation: 5,
+    shadowOpacity: 0.1,
+    shadowRadius: 16,
+    elevation: 6,
     borderWidth: 1,
-    borderColor: Colors.primary + '25',
+    borderColor: Colors.primary + '20',
   },
   formTitle: {
     fontSize: 16,
-    fontWeight: '700',
+    fontWeight: '800',
     color: Colors.darkBlue,
     marginBottom: 16,
+    letterSpacing: -0.2,
   },
   fieldLabel: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: Colors.textLight,
+    fontSize: 11,
+    fontWeight: '700',
+    color: Colors.textMuted,
     marginBottom: 6,
-    marginTop: 4,
+    marginTop: 8,
     textTransform: 'uppercase',
-    letterSpacing: 0.4,
+    letterSpacing: 0.7,
   },
   input: {
     borderWidth: 1.5,
     borderColor: Colors.border,
-    borderRadius: 10,
+    borderRadius: 12,
     paddingHorizontal: 14,
-    paddingVertical: 11,
+    paddingVertical: 12,
     fontSize: 14,
     color: Colors.text,
-    backgroundColor: Colors.background,
+    backgroundColor: Colors.inputBg,
     marginBottom: 4,
   },
   inputMultiline: {
-    height: 80,
-    paddingTop: 11,
+    height: 84,
+    paddingTop: 12,
   },
   formActions: {
     flexDirection: 'row',
@@ -601,7 +566,7 @@ const styles = StyleSheet.create({
   },
   cancelBtn: {
     flex: 1,
-    borderRadius: 10,
+    borderRadius: 24,
     paddingVertical: 13,
     borderWidth: 1.5,
     borderColor: Colors.border,
@@ -615,7 +580,7 @@ const styles = StyleSheet.create({
   },
   addBtn: {
     flex: 2,
-    borderRadius: 10,
+    borderRadius: 24,
     paddingVertical: 13,
     backgroundColor: Colors.primary,
     flexDirection: 'row',
@@ -629,7 +594,6 @@ const styles = StyleSheet.create({
     color: Colors.white,
   },
 
-  // Summary
   summaryRow: {
     flexDirection: 'row',
     paddingHorizontal: 20,
@@ -638,13 +602,16 @@ const styles = StyleSheet.create({
   },
   summaryCard: {
     flex: 1,
-    borderRadius: 14,
+    borderRadius: 16,
     paddingVertical: 14,
     alignItems: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(0,0,0,0.04)',
   },
   summaryValue: {
-    fontSize: 24,
+    fontSize: 26,
     fontWeight: '800',
+    letterSpacing: -0.5,
   },
   summaryLabel: {
     fontSize: 11,
@@ -652,7 +619,6 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
 
-  // Filters
   filtersScroll: {
     marginBottom: 16,
   },
@@ -661,9 +627,9 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   filterChip: {
-    paddingHorizontal: 14,
+    paddingHorizontal: 16,
     paddingVertical: 8,
-    borderRadius: 20,
+    borderRadius: 24,
     borderWidth: 1.5,
     borderColor: Colors.border,
     backgroundColor: Colors.white,
@@ -674,22 +640,23 @@ const styles = StyleSheet.create({
     color: Colors.textLight,
   },
 
-  // Vaccine list
   list: {
     paddingHorizontal: 20,
     gap: 10,
   },
   vaccineCard: {
     backgroundColor: Colors.white,
-    borderRadius: 14,
+    borderRadius: 16,
     padding: 14,
     borderLeftWidth: 4,
     marginBottom: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.06,
-    shadowRadius: 6,
-    elevation: 3,
+    borderWidth: 1,
+    borderColor: Colors.borderLight,
+    shadowColor: Colors.darkBlue,
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.07,
+    shadowRadius: 12,
+    elevation: 4,
   },
   cardHeader: {
     flexDirection: 'row',
@@ -762,10 +729,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 5,
     alignSelf: 'flex-start',
-    paddingHorizontal: 10,
-    paddingVertical: 6,
-    borderRadius: 8,
-    backgroundColor: Colors.danger + '12',
+    paddingHorizontal: 12,
+    paddingVertical: 7,
+    borderRadius: 20,
+    backgroundColor: Colors.dangerLight,
   },
   deleteBtnText: {
     fontSize: 12,
@@ -773,7 +740,6 @@ const styles = StyleSheet.create({
     color: Colors.danger,
   },
 
-  // Empty state
   emptyState: {
     alignItems: 'center',
     paddingVertical: 48,
@@ -792,7 +758,6 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
 
-  // Hint
   hint: {
     flexDirection: 'row',
     alignItems: 'center',
