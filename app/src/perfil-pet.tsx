@@ -155,8 +155,11 @@ const CARD_SHADOW = {
 };
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: Colors.darkBlue, paddingTop: Constants.statusBarHeight },
-
+  safeArea: {
+    flex: 1,
+    backgroundColor: Colors.darkBlue,
+    paddingTop: Constants.statusBarHeight,
+  },
   header: {
     backgroundColor: Colors.darkBlue,
     paddingHorizontal: 20,
@@ -166,8 +169,17 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'flex-start',
   },
-  headerTitle: { fontSize: 24, fontWeight: '800', color: Colors.white, letterSpacing: -0.3 },
-  headerSub: { fontSize: 13, color: 'rgba(255,255,255,0.6)', marginTop: 2 },
+  headerTitle: {
+    fontSize: 24,
+    fontWeight: '800',
+    color: Colors.white,
+    letterSpacing: -0.3,
+  },
+  headerSub: {
+    fontSize: 13,
+    color: 'rgba(255,255,255,0.6)',
+    marginTop: 2,
+  },
   editBtn: {
     width: 48,
     height: 48,
@@ -176,7 +188,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-
   container: {
     flex: 1,
     backgroundColor: Colors.background,
@@ -184,8 +195,10 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 28,
     marginTop: -16,
   },
-  content: { paddingHorizontal: 20, paddingTop: 24 },
-
+  content: {
+    paddingHorizontal: 20,
+    paddingTop: 24,
+  },
   heroCard: {
     backgroundColor: Colors.white,
     borderRadius: 20,
@@ -207,7 +220,11 @@ const styles = StyleSheet.create({
     marginBottom: 14,
     position: 'relative',
   },
-  petPhoto: { width: 106, height: 106, borderRadius: 53 },
+  petPhoto: {
+    width: 106,
+    height: 106,
+    borderRadius: 53,
+  },
   checkBadge: {
     position: 'absolute',
     bottom: 2,
@@ -221,9 +238,22 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: Colors.white,
   },
-  heroName: { fontSize: 26, fontWeight: '800', color: Colors.text, letterSpacing: -0.4, marginBottom: 4 },
-  heroBreed: { fontSize: 14, color: Colors.textLight, marginBottom: 14 },
-  tagsRow: { flexDirection: 'row', gap: 8 },
+  heroName: {
+    fontSize: 26,
+    fontWeight: '800',
+    color: Colors.text,
+    letterSpacing: -0.4,
+    marginBottom: 4,
+  },
+  heroBreed: {
+    fontSize: 14,
+    color: Colors.textLight,
+    marginBottom: 14,
+  },
+  tagsRow: {
+    flexDirection: 'row',
+    gap: 8,
+  },
   tag: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -233,8 +263,11 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     gap: 4,
   },
-  tagText: { fontSize: 12, color: Colors.primary, fontWeight: '600' },
-
+  tagText: {
+    fontSize: 12,
+    color: Colors.primary,
+    fontWeight: '600',
+  },
   statsRow: {
     backgroundColor: Colors.white,
     borderRadius: 18,
@@ -248,12 +281,31 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.05,
     elevation: 3,
   },
-  statBox: { flex: 1, alignItems: 'center' },
-  statVal: { fontSize: 20, fontWeight: '800', color: Colors.text, letterSpacing: -0.3 },
-  statUnit: { fontSize: 9, color: Colors.textMuted, marginTop: -1 },
-  statLbl: { fontSize: 10, color: Colors.textLight, marginTop: 3 },
-  statSep: { width: 1, height: 36, backgroundColor: Colors.border },
-
+  statBox: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  statVal: {
+    fontSize: 20,
+    fontWeight: '800',
+    color: Colors.text,
+    letterSpacing: -0.3,
+  },
+  statUnit: {
+    fontSize: 9,
+    color: Colors.textMuted,
+    marginTop: -1,
+  },
+  statLbl: {
+    fontSize: 10,
+    color: Colors.textLight,
+    marginTop: 3,
+  },
+  statSep: {
+    width: 1,
+    height: 36,
+    backgroundColor: Colors.border,
+  },
   card: {
     backgroundColor: Colors.white,
     borderRadius: 18,
@@ -280,8 +332,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  cardTitle: { fontSize: 14, fontWeight: '700', color: Colors.text },
-
+  cardTitle: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: Colors.text,
+  },
   infoRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -289,7 +344,9 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: Colors.borderLight,
   },
-  infoRowLast: { borderBottomWidth: 0 },
+  infoRowLast: {
+    borderBottomWidth: 0,
+  },
   infoIconBg: {
     width: 34,
     height: 34,
@@ -298,7 +355,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginRight: 12,
   },
-  infoContent: { flex: 1 },
-  infoLabel: { fontSize: 11, color: Colors.textMuted, marginBottom: 2, letterSpacing: 0.2 },
-  infoValue: { fontSize: 14, fontWeight: '600', color: Colors.text },
+  infoContent: {
+    flex: 1,
+  },
+  infoLabel: {
+    fontSize: 11,
+    color: Colors.textMuted,
+    marginBottom: 2,
+    letterSpacing: 0.2,
+  },
+  infoValue: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: Colors.text,
+  },
 });

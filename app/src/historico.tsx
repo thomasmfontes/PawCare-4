@@ -171,8 +171,11 @@ const CARD_SHADOW = {
 };
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: Colors.darkBlue, paddingTop: Constants.statusBarHeight },
-
+  safeArea: {
+    flex: 1,
+    backgroundColor: Colors.darkBlue,
+    paddingTop: Constants.statusBarHeight,
+  },
   header: {
     backgroundColor: Colors.darkBlue,
     paddingHorizontal: 20,
@@ -182,8 +185,17 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'flex-start',
   },
-  headerTitle: { fontSize: 24, fontWeight: '800', color: Colors.white, letterSpacing: -0.3 },
-  headerSub: { fontSize: 13, color: 'rgba(255,255,255,0.6)', marginTop: 2 },
+  headerTitle: {
+    fontSize: 24,
+    fontWeight: '800',
+    color: Colors.white,
+    letterSpacing: -0.3,
+  },
+  headerSub: {
+    fontSize: 13,
+    color: 'rgba(255,255,255,0.6)',
+    marginTop: 2,
+  },
   headerIconBg: {
     width: 48,
     height: 48,
@@ -192,7 +204,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-
   container: {
     flex: 1,
     backgroundColor: Colors.background,
@@ -200,8 +211,10 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 28,
     marginTop: -16,
   },
-  content: { paddingHorizontal: 20, paddingTop: 24 },
-
+  content: {
+    paddingHorizontal: 20,
+    paddingTop: 24,
+  },
   summaryCard: {
     backgroundColor: Colors.white,
     borderRadius: 18,
@@ -215,13 +228,33 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.05,
     elevation: 3,
   },
-  summaryItem: { flex: 1, alignItems: 'center' },
-  summaryVal: { fontSize: 17, fontWeight: '800', letterSpacing: -0.3 },
-  summaryLbl: { fontSize: 10, color: Colors.textMuted, marginTop: 3, letterSpacing: 0.2 },
-  summaryDiv: { width: 1, height: 32, backgroundColor: Colors.border },
-
-  legendScroll: { marginBottom: 20 },
-  legendContent: { gap: 8, paddingRight: 4 },
+  summaryItem: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  summaryVal: {
+    fontSize: 17,
+    fontWeight: '800',
+    letterSpacing: -0.3,
+  },
+  summaryLbl: {
+    fontSize: 10,
+    color: Colors.textMuted,
+    marginTop: 3,
+    letterSpacing: 0.2,
+  },
+  summaryDiv: {
+    width: 1,
+    height: 32,
+    backgroundColor: Colors.border,
+  },
+  legendScroll: {
+    marginBottom: 20,
+  },
+  legendContent: {
+    gap: 8,
+    paddingRight: 4,
+  },
   legendChip: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -230,8 +263,10 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     gap: 5,
   },
-  legendText: { fontSize: 12, fontWeight: '600' },
-
+  legendText: {
+    fontSize: 12,
+    fontWeight: '600',
+  },
   sectionLabel: {
     fontSize: 11,
     fontWeight: '700',
@@ -239,10 +274,18 @@ const styles = StyleSheet.create({
     letterSpacing: 0.8,
     marginBottom: 16,
   },
-
-  timeline: { paddingLeft: 2 },
-  timelineItem: { flexDirection: 'row', marginBottom: 4 },
-  timelineSide: { alignItems: 'center', marginRight: 14, width: 38 },
+  timeline: {
+    paddingLeft: 2,
+  },
+  timelineItem: {
+    flexDirection: 'row',
+    marginBottom: 4,
+  },
+  timelineSide: {
+    alignItems: 'center',
+    marginRight: 14,
+    width: 38,
+  },
   dotOuter: {
     width: 38,
     height: 38,
@@ -260,8 +303,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  timelineLine: { width: 2, flex: 1, minHeight: 20, marginTop: 4, marginBottom: 4, borderRadius: 1 },
-
+  timelineLine: {
+    width: 2,
+    flex: 1,
+    minHeight: 20,
+    marginTop: 4,
+    marginBottom: 4,
+    borderRadius: 1,
+  },
   eventCard: {
     flex: 1,
     backgroundColor: Colors.white,
@@ -281,17 +330,45 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 8,
   },
-  eventBadge: { paddingHorizontal: 9, paddingVertical: 3, borderRadius: 20 },
-  eventBadgeText: { fontSize: 11, fontWeight: '700' },
-  eventDate: { fontSize: 12, color: Colors.textMuted, fontWeight: '500' },
-  eventTitle: { fontSize: 14, fontWeight: '700', color: Colors.text, marginBottom: 4 },
-  eventDesc: { fontSize: 13, color: Colors.textLight, lineHeight: 19, marginBottom: 8 },
+  eventBadge: {
+    paddingHorizontal: 9,
+    paddingVertical: 3,
+    borderRadius: 20,
+  },
+  eventBadgeText: {
+    fontSize: 11,
+    fontWeight: '700',
+  },
+  eventDate: {
+    fontSize: 12,
+    color: Colors.textMuted,
+    fontWeight: '500',
+  },
+  eventTitle: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: Colors.text,
+    marginBottom: 4,
+  },
+  eventDesc: {
+    fontSize: 13,
+    color: Colors.textLight,
+    lineHeight: 19,
+    marginBottom: 8,
+  },
   eventMeta: {
     gap: 4,
     paddingTop: 8,
     borderTopWidth: 1,
     borderTopColor: Colors.borderLight,
   },
-  metaRow: { flexDirection: 'row', alignItems: 'center', gap: 5 },
-  metaText: { fontSize: 12, color: Colors.textMuted },
+  metaRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+  },
+  metaText: {
+    fontSize: 12,
+    color: Colors.textMuted,
+  },
 });

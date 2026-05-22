@@ -177,8 +177,11 @@ const CARD_SHADOW = {
 };
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: Colors.darkBlue, paddingTop: Constants.statusBarHeight },
-
+  safeArea: {
+    flex: 1,
+    backgroundColor: Colors.darkBlue,
+    paddingTop: Constants.statusBarHeight,
+  },
   header: {
     backgroundColor: Colors.darkBlue,
     paddingHorizontal: 20,
@@ -220,7 +223,6 @@ const styles = StyleSheet.create({
     borderWidth: 1.5,
     borderColor: Colors.darkBlue,
   },
-
   container: {
     flex: 1,
     backgroundColor: Colors.background,
@@ -228,8 +230,10 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 28,
     marginTop: -16,
   },
-  content: { paddingHorizontal: 20, paddingTop: 24 },
-
+  content: {
+    paddingHorizontal: 20,
+    paddingTop: 24,
+  },
   petCard: {
     backgroundColor: Colors.white,
     borderRadius: 20,
@@ -239,7 +243,11 @@ const styles = StyleSheet.create({
     borderColor: Colors.borderLight,
     ...CARD_SHADOW,
   },
-  petCardRow: { flexDirection: 'row', alignItems: 'flex-start', marginBottom: 14 },
+  petCardRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    marginBottom: 14,
+  },
   petPhoto: {
     width: 86,
     height: 86,
@@ -248,9 +256,22 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: Colors.primary + '30',
   },
-  petInfo: { flex: 1, marginLeft: 14 },
-  petNameRow: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 2 },
-  petName: { fontSize: 22, fontWeight: '800', color: Colors.text, letterSpacing: -0.3 },
+  petInfo: {
+    flex: 1,
+    marginLeft: 14,
+  },
+  petNameRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    marginBottom: 2,
+  },
+  petName: {
+    fontSize: 22,
+    fontWeight: '800',
+    color: Colors.text,
+    letterSpacing: -0.3,
+  },
   genderBadge: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -260,14 +281,44 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     gap: 3,
   },
-  genderText: { fontSize: 11, color: Colors.primary, fontWeight: '600' },
-  petBreed: { fontSize: 13, color: Colors.textLight, marginBottom: 12 },
-  petStatsRow: { flexDirection: 'row', alignItems: 'center' },
-  petStat: { flex: 1, alignItems: 'center' },
-  petStatVal: { fontSize: 13, fontWeight: '700', color: Colors.text },
-  petStatUnit: { fontSize: 9, color: Colors.textMuted, marginTop: -2 },
-  petStatLbl: { fontSize: 10, color: Colors.textMuted, marginTop: 2 },
-  statDivider: { width: 1, height: 28, backgroundColor: Colors.border },
+  genderText: {
+    fontSize: 11,
+    color: Colors.primary,
+    fontWeight: '600',
+  },
+  petBreed: {
+    fontSize: 13,
+    color: Colors.textLight,
+    marginBottom: 12,
+  },
+  petStatsRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  petStat: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  petStatVal: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: Colors.text,
+  },
+  petStatUnit: {
+    fontSize: 9,
+    color: Colors.textMuted,
+    marginTop: -2,
+  },
+  petStatLbl: {
+    fontSize: 10,
+    color: Colors.textMuted,
+    marginTop: 2,
+  },
+  statDivider: {
+    width: 1,
+    height: 28,
+    backgroundColor: Colors.border,
+  },
   healthBar: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -277,8 +328,11 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     gap: 7,
   },
-  healthBarText: { fontSize: 12, color: Colors.success, fontWeight: '600' },
-
+  healthBarText: {
+    fontSize: 12,
+    color: Colors.success,
+    fontWeight: '600',
+  },
   sectionLabel: {
     fontSize: 11,
     fontWeight: '700',
@@ -292,9 +346,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 12,
   },
-  seeAll: { fontSize: 13, color: Colors.primary, fontWeight: '600' },
-
-  statsGrid: { flexDirection: 'row', gap: 10, marginBottom: 28 },
+  seeAll: {
+    fontSize: 13,
+    color: Colors.primary,
+    fontWeight: '600',
+  },
+  statsGrid: {
+    flexDirection: 'row',
+    gap: 10,
+    marginBottom: 28,
+  },
   statCard: {
     flex: 1,
     borderRadius: 18,
@@ -309,15 +370,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  statCardVal: { fontSize: 24, fontWeight: '800', letterSpacing: -0.5 },
+  statCardVal: {
+    fontSize: 24,
+    fontWeight: '800',
+    letterSpacing: -0.5,
+  },
   statCardLbl: {
     fontSize: 10,
     color: Colors.textLight,
     textAlign: 'center',
     lineHeight: 14,
   },
-
-  activitiesList: { gap: 10, marginBottom: 24 },
+  activitiesList: {
+    gap: 10,
+    marginBottom: 24,
+  },
   activityCard: {
     backgroundColor: Colors.white,
     borderRadius: 14,
@@ -336,13 +403,34 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  activityInfo: { flex: 1, marginLeft: 12 },
-  activityTitle: { fontSize: 14, fontWeight: '600', color: Colors.text, marginBottom: 3 },
-  activityDateRow: { flexDirection: 'row', alignItems: 'center', gap: 4 },
-  activityDate: { fontSize: 12, color: Colors.textMuted },
-  activityBadge: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 20 },
-  activityBadgeText: { fontSize: 11, fontWeight: '700' },
-
+  activityInfo: {
+    flex: 1,
+    marginLeft: 12,
+  },
+  activityTitle: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: Colors.text,
+    marginBottom: 3,
+  },
+  activityDateRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  activityDate: {
+    fontSize: 12,
+    color: Colors.textMuted,
+  },
+  activityBadge: {
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 20,
+  },
+  activityBadgeText: {
+    fontSize: 11,
+    fontWeight: '700',
+  },
   tipBanner: {
     backgroundColor: Colors.warningLight,
     borderRadius: 18,
@@ -362,7 +450,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  tipBody: { flex: 1 },
-  tipTitle: { fontSize: 13, fontWeight: '700', color: '#92400E', marginBottom: 4 },
-  tipText: { fontSize: 13, color: '#78350F', lineHeight: 19 },
+  tipBody: {
+    flex: 1,
+  },
+  tipTitle: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: '#92400E',
+    marginBottom: 4,
+  },
+  tipText: {
+    fontSize: 13,
+    color: '#78350F',
+    lineHeight: 19,
+  },
 });

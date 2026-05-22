@@ -157,8 +157,11 @@ const CARD_SHADOW = {
 };
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: Colors.darkBlue, paddingTop: Constants.statusBarHeight },
-
+  safeArea: {
+    flex: 1,
+    backgroundColor: Colors.darkBlue,
+    paddingTop: Constants.statusBarHeight,
+  },
   header: {
     backgroundColor: Colors.darkBlue,
     paddingHorizontal: 20,
@@ -168,8 +171,17 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'flex-start',
   },
-  headerTitle: { fontSize: 24, fontWeight: '800', color: Colors.white, letterSpacing: -0.3 },
-  headerSub: { fontSize: 13, color: 'rgba(255,255,255,0.6)', marginTop: 2 },
+  headerTitle: {
+    fontSize: 24,
+    fontWeight: '800',
+    color: Colors.white,
+    letterSpacing: -0.3,
+  },
+  headerSub: {
+    fontSize: 13,
+    color: 'rgba(255,255,255,0.6)',
+    marginTop: 2,
+  },
   headerIconBg: {
     width: 48,
     height: 48,
@@ -178,7 +190,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-
   container: {
     flex: 1,
     backgroundColor: Colors.background,
@@ -186,8 +197,10 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 28,
     marginTop: -16,
   },
-  content: { paddingHorizontal: 20, paddingTop: 20 },
-
+  content: {
+    paddingHorizontal: 20,
+    paddingTop: 20,
+  },
   introBanner: {
     backgroundColor: Colors.white,
     borderRadius: 18,
@@ -212,10 +225,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  introBody: { flex: 1 },
-  introTitle: { fontSize: 15, fontWeight: '700', color: Colors.text },
-  introSub: { fontSize: 13, color: Colors.textLight, marginTop: 2 },
-
+  introBody: {
+    flex: 1,
+  },
+  introTitle: {
+    fontSize: 15,
+    fontWeight: '700',
+    color: Colors.text,
+  },
+  introSub: {
+    fontSize: 13,
+    color: Colors.textLight,
+    marginTop: 2,
+  },
   statsRow: {
     backgroundColor: Colors.white,
     borderRadius: 18,
@@ -229,11 +251,26 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.05,
     elevation: 3,
   },
-  statItem: { flex: 1, alignItems: 'center' },
-  statVal: { fontSize: 22, fontWeight: '800', letterSpacing: -0.4 },
-  statLbl: { fontSize: 10, color: Colors.textMuted, marginTop: 3, textAlign: 'center' },
-  statDiv: { width: 1, height: 32, backgroundColor: Colors.border },
-
+  statItem: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  statVal: {
+    fontSize: 22,
+    fontWeight: '800',
+    letterSpacing: -0.4,
+  },
+  statLbl: {
+    fontSize: 10,
+    color: Colors.textMuted,
+    marginTop: 3,
+    textAlign: 'center',
+  },
+  statDiv: {
+    width: 1,
+    height: 32,
+    backgroundColor: Colors.border,
+  },
   sectionLabel: {
     fontSize: 11,
     fontWeight: '700',
@@ -241,8 +278,10 @@ const styles = StyleSheet.create({
     letterSpacing: 0.8,
     marginBottom: 14,
   },
-
-  cardsList: { gap: 14, marginBottom: 20 },
+  cardsList: {
+    gap: 14,
+    marginBottom: 20,
+  },
   careCard: {
     backgroundColor: Colors.white,
     borderRadius: 18,
@@ -257,7 +296,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     padding: 14,
   },
-  careHeaderLeft: { flexDirection: 'row', alignItems: 'center', gap: 12 },
+  careHeaderLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
   careIconBg: {
     width: 46,
     height: 46,
@@ -266,9 +309,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  careTitle: { fontSize: 15, fontWeight: '700', color: Colors.white, letterSpacing: -0.2 },
-  careCategory: { fontSize: 12, color: 'rgba(255,255,255,0.72)', marginTop: 1 },
-  careHeaderRight: { alignItems: 'flex-end', gap: 6 },
+  careTitle: {
+    fontSize: 15,
+    fontWeight: '700',
+    color: Colors.white,
+    letterSpacing: -0.2,
+  },
+  careCategory: {
+    fontSize: 12,
+    color: 'rgba(255,255,255,0.72)',
+    marginTop: 1,
+  },
+  careHeaderRight: {
+    alignItems: 'flex-end',
+    gap: 6,
+  },
   freqBadge: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -277,9 +332,14 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     gap: 4,
   },
-  freqText: { fontSize: 10, fontWeight: '700', color: Colors.white },
-
-  careBody: { padding: 14 },
+  freqText: {
+    fontSize: 10,
+    fontWeight: '700',
+    color: Colors.white,
+  },
+  careBody: {
+    padding: 14,
+  },
   tipRow: {
     flexDirection: 'row',
     alignItems: 'flex-start',
@@ -295,8 +355,17 @@ const styles = StyleSheet.create({
     marginTop: 1,
     flexShrink: 0,
   },
-  tipNumText: { fontSize: 10, fontWeight: '800', color: Colors.white },
-  tipText: { fontSize: 13, color: Colors.textBody, flex: 1, lineHeight: 19 },
+  tipNumText: {
+    fontSize: 10,
+    fontWeight: '800',
+    color: Colors.white,
+  },
+  tipText: {
+    fontSize: 13,
+    color: Colors.textBody,
+    flex: 1,
+    lineHeight: 19,
+  },
   careFooter: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -306,8 +375,10 @@ const styles = StyleSheet.create({
     borderTopColor: Colors.borderLight,
     marginTop: 2,
   },
-  expandHint: { fontSize: 12, fontWeight: '700' },
-
+  expandHint: {
+    fontSize: 12,
+    fontWeight: '700',
+  },
   footerNote: {
     flexDirection: 'row',
     alignItems: 'flex-start',
@@ -319,5 +390,10 @@ const styles = StyleSheet.create({
     borderColor: Colors.danger + '25',
     marginBottom: 8,
   },
-  footerNoteText: { flex: 1, fontSize: 13, color: '#7F1D1D', lineHeight: 19 },
+  footerNoteText: {
+    flex: 1,
+    fontSize: 13,
+    color: '#7F1D1D',
+    lineHeight: 19,
+  },
 });

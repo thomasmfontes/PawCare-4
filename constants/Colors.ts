@@ -24,9 +24,9 @@ const Colors = {
   inputBg: '#F8F9FB',
 
   // Text
-  text: '#0D2B52', // Using darkBlue as main text is common, but let's keep it close
+  text: '#0D2B52',
   textBody: '#334155',
-  textLight: '#6B7280', // requested cinza
+  textLight: '#6B7280',
   textMuted: '#9CA3AF',
 
   // Borders

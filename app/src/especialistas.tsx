@@ -150,8 +150,11 @@ const CARD_SHADOW = {
 };
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: Colors.darkBlue, paddingTop: Constants.statusBarHeight },
-
+  safeArea: {
+    flex: 1,
+    backgroundColor: Colors.darkBlue,
+    paddingTop: Constants.statusBarHeight,
+  },
   header: {
     backgroundColor: Colors.darkBlue,
     paddingHorizontal: 20,
@@ -161,8 +164,17 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'flex-start',
   },
-  headerTitle: { fontSize: 24, fontWeight: '800', color: Colors.white, letterSpacing: -0.3 },
-  headerSub: { fontSize: 13, color: 'rgba(255,255,255,0.6)', marginTop: 2 },
+  headerTitle: {
+    fontSize: 24,
+    fontWeight: '800',
+    color: Colors.white,
+    letterSpacing: -0.3,
+  },
+  headerSub: {
+    fontSize: 13,
+    color: 'rgba(255,255,255,0.6)',
+    marginTop: 2,
+  },
   headerIconBg: {
     width: 48,
     height: 48,
@@ -171,7 +183,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-
   container: {
     flex: 1,
     backgroundColor: Colors.background,
@@ -180,7 +191,6 @@ const styles = StyleSheet.create({
     marginTop: -16,
     paddingTop: 20,
   },
-
   filterRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -202,15 +212,35 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.04,
     elevation: 2,
   },
-  filterToggleOn: { borderColor: Colors.success, backgroundColor: Colors.successLight },
-  filterDot: { width: 8, height: 8, borderRadius: 4 },
-  filterToggleText: { fontSize: 13, fontWeight: '600', color: Colors.textLight },
-  filterToggleTextOn: { color: Colors.success },
-  filterCount: { fontSize: 13, color: Colors.textMuted, fontWeight: '500' },
-
-  list: { flex: 1 },
-  listContent: { paddingHorizontal: 20, gap: 14 },
-
+  filterToggleOn: {
+    borderColor: Colors.success,
+    backgroundColor: Colors.successLight,
+  },
+  filterDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+  },
+  filterToggleText: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: Colors.textLight,
+  },
+  filterToggleTextOn: {
+    color: Colors.success,
+  },
+  filterCount: {
+    fontSize: 13,
+    color: Colors.textMuted,
+    fontWeight: '500',
+  },
+  list: {
+    flex: 1,
+  },
+  listContent: {
+    paddingHorizontal: 20,
+    gap: 14,
+  },
   card: {
     backgroundColor: Colors.white,
     borderRadius: 20,
@@ -219,11 +249,22 @@ const styles = StyleSheet.create({
     borderColor: Colors.borderLight,
     ...CARD_SHADOW,
   },
-  accentBar: { height: 4, width: '100%' },
-  cardInner: { padding: 16 },
-
-  cardTop: { flexDirection: 'row', alignItems: 'flex-start', marginBottom: 14 },
-  photoWrapper: { position: 'relative', marginRight: 12 },
+  accentBar: {
+    height: 4,
+    width: '100%',
+  },
+  cardInner: {
+    padding: 16,
+  },
+  cardTop: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    marginBottom: 14,
+  },
+  photoWrapper: {
+    position: 'relative',
+    marginRight: 12,
+  },
   photo: {
     width: 60,
     height: 60,
@@ -242,9 +283,15 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: Colors.white,
   },
-
-  mainInfo: { flex: 1 },
-  name: { fontSize: 15, fontWeight: '700', color: Colors.text, marginBottom: 5 },
+  mainInfo: {
+    flex: 1,
+  },
+  name: {
+    fontSize: 15,
+    fontWeight: '700',
+    color: Colors.text,
+    marginBottom: 5,
+  },
   specialtyPill: {
     alignSelf: 'flex-start',
     backgroundColor: Colors.primaryLight,
@@ -253,27 +300,62 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     marginBottom: 6,
   },
-  specialtyText: { fontSize: 11, fontWeight: '600', color: Colors.primary },
-  ratingRow: { flexDirection: 'row', alignItems: 'center', gap: 4 },
-  starsRow: { flexDirection: 'row', gap: 2 },
-  ratingVal: { fontSize: 12, fontWeight: '700', color: Colors.text },
-  reviewCount: { fontSize: 11, color: Colors.textMuted },
-
+  specialtyText: {
+    fontSize: 11,
+    fontWeight: '600',
+    color: Colors.primary,
+  },
+  ratingRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  starsRow: {
+    flexDirection: 'row',
+    gap: 2,
+  },
+  ratingVal: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: Colors.text,
+  },
+  reviewCount: {
+    fontSize: 11,
+    color: Colors.textMuted,
+  },
   availBadge: {
     paddingHorizontal: 9,
     paddingVertical: 4,
     borderRadius: 20,
     alignSelf: 'flex-start',
   },
-  availText: { fontSize: 10, fontWeight: '700' },
-
-  divider: { height: 1, backgroundColor: Colors.borderLight, marginBottom: 12 },
-
-  details: { gap: 7, marginBottom: 14 },
-  detailRow: { flexDirection: 'row', alignItems: 'center', gap: 7 },
-  detailText: { fontSize: 13, color: Colors.textLight, flex: 1 },
-
-  actions: { flexDirection: 'row', gap: 10 },
+  availText: {
+    fontSize: 10,
+    fontWeight: '700',
+  },
+  divider: {
+    height: 1,
+    backgroundColor: Colors.borderLight,
+    marginBottom: 12,
+  },
+  details: {
+    gap: 7,
+    marginBottom: 14,
+  },
+  detailRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 7,
+  },
+  detailText: {
+    fontSize: 13,
+    color: Colors.textLight,
+    flex: 1,
+  },
+  actions: {
+    flexDirection: 'row',
+    gap: 10,
+  },
   btnOutline: {
     flex: 1,
     flexDirection: 'row',
@@ -285,7 +367,11 @@ const styles = StyleSheet.create({
     borderWidth: 1.5,
     borderColor: Colors.primary,
   },
-  btnOutlineText: { fontSize: 13, fontWeight: '700', color: Colors.primary },
+  btnOutlineText: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: Colors.primary,
+  },
   btnFilled: {
     flex: 2,
     flexDirection: 'row',
@@ -296,9 +382,14 @@ const styles = StyleSheet.create({
     gap: 6,
     backgroundColor: Colors.primary,
   },
-  btnDisabled: { backgroundColor: Colors.textMuted },
-  btnFilledText: { fontSize: 13, fontWeight: '700', color: Colors.white },
-
+  btnDisabled: {
+    backgroundColor: Colors.textMuted,
+  },
+  btnFilledText: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: Colors.white,
+  },
   disclaimer: {
     flexDirection: 'row',
     alignItems: 'flex-start',
@@ -306,5 +397,10 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     paddingHorizontal: 4,
   },
-  disclaimerText: { fontSize: 12, color: Colors.textMuted, flex: 1, lineHeight: 17 },
+  disclaimerText: {
+    fontSize: 12,
+    color: Colors.textMuted,
+    flex: 1,
+    lineHeight: 17,
+  },
 });

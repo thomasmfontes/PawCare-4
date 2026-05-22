@@ -450,14 +450,14 @@ export default function VacinasScreen() {
 }
 
 const styles = StyleSheet.create({
-  flex: { flex: 1 },
-
+  flex: {
+    flex: 1,
+  },
   safeArea: {
     flex: 1,
     backgroundColor: Colors.darkBlue,
     paddingTop: Constants.statusBarHeight,
   },
-
   header: {
     backgroundColor: Colors.darkBlue,
     paddingHorizontal: 20,
@@ -489,7 +489,6 @@ const styles = StyleSheet.create({
   headerBtnActive: {
     backgroundColor: Colors.danger + 'BB',
   },
-
   container: {
     flex: 1,
     backgroundColor: Colors.background,
@@ -501,7 +500,6 @@ const styles = StyleSheet.create({
   scrollContent: {
     paddingTop: 20,
   },
-
   loadingWrapper: {
     flex: 1,
     alignItems: 'center',
@@ -513,7 +511,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: Colors.textLight,
   },
-
   formCard: {
     backgroundColor: Colors.white,
     marginHorizontal: 20,
@@ -593,7 +590,6 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: Colors.white,
   },
-
   summaryRow: {
     flexDirection: 'row',
     paddingHorizontal: 20,
@@ -618,7 +614,6 @@ const styles = StyleSheet.create({
     color: Colors.textLight,
     marginTop: 2,
   },
-
   filtersScroll: {
     marginBottom: 16,
   },
@@ -639,7 +634,6 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: Colors.textLight,
   },
-
   list: {
     paddingHorizontal: 20,
     gap: 10,
@@ -739,7 +733,6 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: Colors.danger,
   },
-
   emptyState: {
     alignItems: 'center',
     paddingVertical: 48,
@@ -757,7 +750,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     lineHeight: 20,
   },
-
   hint: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -770,5 +762,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: Colors.textMuted,
   },
-  bottomSpacer: { height: 20 },
+  bottomSpacer: {
+    height: 20,
+  },
 });
