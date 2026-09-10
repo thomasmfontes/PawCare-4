@@ -1,0 +1,12 @@
+1. INTEGRANTES DO GRUPO:
+- Thomas Fontes - RM 562254
+- Gabriel Maciel - RM 562795
+- Vitória Rodrigues - RM 565160
+- Augusto Bonomo - RM 565155
+- Matheus Molina - RM 563399
+
+2. Repositório do App Mobile:
+   https://github.com/AntonioCarvalhoFIAP/challenge-1-thomasmfontes
+
+3. Link do Vídeo de Demonstração (YouTube):
+   [INSERIR_LINK_DO_VIDEO_AQUI]
