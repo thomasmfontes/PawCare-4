@@ -85,12 +85,12 @@ export default function VaccineModal({
       setLoading(true);
       const payload: VaccinePayload = {
         name: name.trim(),
-        date: date.trim() || 'A definir',
+        date: date.trim(),
         nextDate: nextDate.trim(),
         status,
-        veterinarian: veterinarian.trim() || 'Não informado',
-        clinic: clinic.trim() || 'Não informada',
-        notes: notes.trim() || 'Sem observações adicionais',
+        veterinarian: veterinarian.trim(),
+        clinic: clinic.trim(),
+        notes: notes.trim(),
       };
 
       await onSave(payload, vaccineToEdit?.id);

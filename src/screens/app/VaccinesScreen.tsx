@@ -198,7 +198,7 @@ export default function VaccinesScreen() {
                 <View style={styles.datesRow}>
                   <View style={styles.dateCol}>
                     <Text style={styles.dateLabel}>Data Aplicação</Text>
-                    <Text style={styles.dateValue}>{item.date || 'Não informada'}</Text>
+                    <Text style={styles.dateValue}>{item.date || '-'}</Text>
                   </View>
                   <View style={styles.dateCol}>
                     <Text style={styles.dateLabel}>Próxima Dose</Text>
@@ -208,7 +208,7 @@ export default function VaccinesScreen() {
                   </View>
                 </View>
 
-                {item.veterinarian && item.veterinarian !== 'Não informado' ? (
+                {item.veterinarian ? (
                   <Text style={styles.detailText}>
                     <Text style={styles.detailBold}>Vet: </Text>
                     {item.veterinarian} {item.clinic ? `• ${item.clinic}` : ''}
