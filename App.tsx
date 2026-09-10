@@ -22,7 +22,7 @@ export default function App() {
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
           <NavigationContainer>
-            <StatusBar style="light" backgroundColor="#0D2B52" />
+            <StatusBar style="light" />
             <Routes />
           </NavigationContainer>
         </AuthProvider>
