@@ -58,9 +58,26 @@ export default function VaccineModal({
     }
   }, [vaccineToEdit, visible]);
 
+  const formatDateMask = (value: string): string => {
+    const digits = value.replace(/\D/g, '').slice(0, 8);
+    if (digits.length <= 2) return digits;
+    if (digits.length <= 4) return `${digits.slice(0, 2)}/${digits.slice(2)}`;
+    return `${digits.slice(0, 2)}/${digits.slice(2, 4)}/${digits.slice(4)}`;
+  };
+
   const handleSubmit = async () => {
     if (!name.trim() || !nextDate.trim()) {
-      Alert.alert('Campos Obrigatórios', 'Por favor, informe pelo menos o Nome da Vacina e a Próxima Dose.');
+      Alert.alert('Campos Obrigatórios', 'Por favor, informe o Nome da Vacina e a Próxima Dose.');
+      return;
+    }
+
+    if (nextDate.trim().length !== 10) {
+      Alert.alert('Data Inválida', 'A data da próxima dose deve estar no formato DD/MM/AAAA.');
+      return;
+    }
+
+    if (date.trim().length > 0 && date.trim().length !== 10) {
+      Alert.alert('Data Inválida', 'A data de aplicação deve estar no formato DD/MM/AAAA.');
       return;
     }
 
@@ -152,18 +169,22 @@ export default function VaccineModal({
               <View style={styles.flex1}>
                 <CustomInput
                   label="Data Aplicação"
-                  placeholder="Ex: 10/03/2024"
+                  placeholder="DD/MM/AAAA"
+                  keyboardType="numeric"
+                  maxLength={10}
                   value={date}
-                  onChangeText={setDate}
+                  onChangeText={(text) => setDate(formatDateMask(text))}
                 />
               </View>
               <View style={styles.spacing} />
               <View style={styles.flex1}>
                 <CustomInput
                   label="Próxima Dose *"
-                  placeholder="Ex: 10/03/2025"
+                  placeholder="DD/MM/AAAA"
+                  keyboardType="numeric"
+                  maxLength={10}
                   value={nextDate}
-                  onChangeText={setNextDate}
+                  onChangeText={(text) => setNextDate(formatDateMask(text))}
                 />
               </View>
             </View>
