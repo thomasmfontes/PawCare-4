@@ -44,7 +44,7 @@ const SPECIALISTS_DATA: SpecialistItem[] = [
     rating: 4.8,
     reviews: 98,
     available: true,
-    photo: 'https://images.unsplash.com/photo-1594824813689-f54f76634560?w=300&auto=format&fit=crop&q=60',
+    photo: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=300&auto=format&fit=crop&q=60',
     experience: '6 anos',
   },
   {
