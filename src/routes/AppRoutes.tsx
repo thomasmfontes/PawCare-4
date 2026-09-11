@@ -1,6 +1,7 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Platform } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import Colors from '../theme/Colors';
 
@@ -58,6 +59,9 @@ function TabIcon({
 const Tab = createBottomTabNavigator<AppTabParamList>();
 
 export default function AppRoutes() {
+  const insets = useSafeAreaInsets();
+  const bottomInset = insets.bottom > 0 ? insets.bottom : (Platform.OS === 'android' ? 12 : 8);
+
   return (
     <Tab.Navigator
       initialRouteName="Home"
@@ -65,8 +69,15 @@ export default function AppRoutes() {
         headerShown: false,
         tabBarActiveTintColor: Colors.tabBarActive,
         tabBarInactiveTintColor: Colors.tabBarInactive,
-        tabBarStyle: styles.tabBar,
+        tabBarStyle: [
+          styles.tabBar,
+          {
+            height: 54 + bottomInset,
+            paddingBottom: bottomInset,
+          },
+        ],
         tabBarLabelStyle: styles.tabLabel,
+        tabBarItemStyle: styles.tabBarItem,
       }}
     >
       {TABS.map(({ name, title, icon, iconOutline, component }) => (
@@ -94,20 +105,23 @@ const styles = StyleSheet.create({
   tabBar: {
     backgroundColor: Colors.white,
     borderTopWidth: 0,
-    height: 68,
     paddingTop: 6,
-    paddingBottom: 10,
     shadowColor: Colors.darkBlue,
     shadowOffset: { width: 0, height: -4 },
     shadowOpacity: 0.08,
     shadowRadius: 16,
     elevation: 20,
   },
+  tabBarItem: {
+    paddingVertical: 2,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   tabLabel: {
     fontSize: 10,
     fontWeight: '600',
-    letterSpacing: 0.2,
-    marginTop: 2,
+    letterSpacing: 0.1,
+    marginTop: -3,
   },
   iconWrapper: {
     width: 38,
