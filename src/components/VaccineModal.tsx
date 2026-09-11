@@ -103,7 +103,13 @@ export default function VaccineModal({
   };
 
   return (
-    <Modal visible={visible} animationType="slide" transparent>
+    <Modal
+      visible={visible}
+      animationType="slide"
+      transparent
+      statusBarTranslucent
+      onRequestClose={onClose}
+    >
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         style={styles.overlay}
@@ -118,7 +124,11 @@ export default function VaccineModal({
             </TouchableOpacity>
           </View>
 
-          <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.body}>
+          <ScrollView
+            style={styles.scrollView}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={styles.body}
+          >
             <CustomInput
               label="Nome da Vacina *"
               placeholder="Ex: V10 (Décupla)"
@@ -235,8 +245,8 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
-    maxHeight: '90%',
-    paddingBottom: 24,
+    height: '92%',
+    paddingBottom: Platform.OS === 'android' ? 30 : 36,
   },
   header: {
     flexDirection: 'row',
@@ -251,8 +261,12 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: Colors.text,
   },
+  scrollView: {
+    flex: 1,
+  },
   body: {
     padding: 20,
+    paddingBottom: 40,
   },
   row: {
     flexDirection: 'row',
