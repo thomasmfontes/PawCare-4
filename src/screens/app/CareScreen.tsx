@@ -99,15 +99,17 @@ export default function CareScreen() {
                   <View style={styles.iconCircle}>
                     <Ionicons name={card.icon} size={22} color={Colors.white} />
                   </View>
-                  <View>
+                  <View style={styles.headerTitles}>
                     <Text style={styles.cardTitle}>{card.title}</Text>
-                    <Text style={styles.cardCategory}>{card.category}</Text>
+                    <View style={styles.categoryRow}>
+                      <Text style={styles.cardCategory}>{card.category}</Text>
+                      <View style={styles.freqBadge}>
+                        <Text style={styles.freqText}>{card.frequency}</Text>
+                      </View>
+                    </View>
                   </View>
                 </View>
                 <View style={styles.cardHeaderRight}>
-                  <View style={styles.freqBadge}>
-                    <Text style={styles.freqText}>{card.frequency}</Text>
-                  </View>
                   <Ionicons
                     name={isExpanded ? 'chevron-up' : 'chevron-down'}
                     size={18}
@@ -192,34 +194,48 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 12,
     flex: 1,
+    marginRight: 8,
   },
   iconCircle: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 42,
+    height: 42,
+    borderRadius: 21,
     backgroundColor: 'rgba(255, 255, 255, 0.25)',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  headerTitles: {
+    flex: 1,
   },
   cardTitle: {
     fontSize: 15,
     fontWeight: '800',
     color: Colors.white,
+    lineHeight: 20,
   },
-  cardCategory: {
-    fontSize: 11,
-    color: 'rgba(255, 255, 255, 0.8)',
-    marginTop: 2,
-  },
-  cardHeaderRight: {
+  categoryRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
+    marginTop: 3,
+  },
+  cardCategory: {
+    fontSize: 11,
+    color: 'rgba(255, 255, 255, 0.85)',
+    fontWeight: '500',
+  },
+  cardHeaderRight: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   freqBadge: {
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
+    backgroundColor: 'rgba(255, 255, 255, 0.25)',
+    paddingHorizontal: 7,
+    paddingVertical: 2,
     borderRadius: 6,
   },
   freqText: {
