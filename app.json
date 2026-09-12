@@ -14,12 +14,25 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.thomasfontes.pawcare",
       "adaptiveIcon": {
         "backgroundColor": "#0D2B52"
       }
     },
     "plugins": [
-      "expo-status-bar"
-    ]
+      "expo-status-bar",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "O PawCare precisa de acesso à galeria para você selecionar a foto do seu pet.",
+          "cameraPermission": "O PawCare precisa de acesso à câmera para você tirar uma foto do seu pet."
+        }
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "77b616b0-0ade-482e-84e4-b08d771a2e99"
+      }
+    }
   }
 }

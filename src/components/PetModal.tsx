@@ -3,6 +3,7 @@ import {
   Modal,
   View,
   Text,
+  Image,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
@@ -11,10 +12,14 @@ import {
   Alert,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import * as ImagePicker from 'expo-image-picker';
 import Colors from '../theme/Colors';
 import CustomInput from './CustomInput';
 import CustomButton from './CustomButton';
 import { Pet, PetPayload } from '../types/pet';
+
+const DEFAULT_PET_PHOTO =
+  'https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=500&auto=format&fit=crop&q=60';
 
 interface PetModalProps {
   visible: boolean;
@@ -31,6 +36,7 @@ export default function PetModal({ visible, petToEdit, onClose, onSave }: PetMod
   const [gender, setGender] = useState<'Macho' | 'Fêmea'>('Fêmea');
   const [color, setColor] = useState('');
   const [chip, setChip] = useState('');
+  const [photo, setPhoto] = useState(DEFAULT_PET_PHOTO);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -42,6 +48,7 @@ export default function PetModal({ visible, petToEdit, onClose, onSave }: PetMod
       setGender(petToEdit.gender || 'Fêmea');
       setColor(petToEdit.color || '');
       setChip(petToEdit.chip || '');
+      setPhoto(petToEdit.photo || DEFAULT_PET_PHOTO);
     } else {
       setName('');
       setBreed('');
@@ -50,8 +57,60 @@ export default function PetModal({ visible, petToEdit, onClose, onSave }: PetMod
       setGender('Fêmea');
       setColor('');
       setChip('');
+      setPhoto(DEFAULT_PET_PHOTO);
     }
   }, [petToEdit, visible]);
+
+  const pickFromGallery = async () => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== 'granted') {
+      Alert.alert(
+        'Permissão Necessária',
+        'Precisamos de acesso à sua galeria para selecionar uma foto.'
+      );
+      return;
+    }
+
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ['images'],
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 0.8,
+    });
+
+    if (!result.canceled && result.assets[0]) {
+      setPhoto(result.assets[0].uri);
+    }
+  };
+
+  const takePhoto = async () => {
+    const { status } = await ImagePicker.requestCameraPermissionsAsync();
+    if (status !== 'granted') {
+      Alert.alert(
+        'Permissão Necessária',
+        'Precisamos de acesso à câmera para tirar uma foto.'
+      );
+      return;
+    }
+
+    const result = await ImagePicker.launchCameraAsync({
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 0.8,
+    });
+
+    if (!result.canceled && result.assets[0]) {
+      setPhoto(result.assets[0].uri);
+    }
+  };
+
+  const showImageOptions = () => {
+    Alert.alert('Foto do Pet', 'Escolha de onde deseja selecionar a foto:', [
+      { text: 'Câmera', onPress: takePhoto },
+      { text: 'Galeria', onPress: pickFromGallery },
+      { text: 'Cancelar', style: 'cancel' },
+    ]);
+  };
 
   const handleSubmit = async () => {
     if (!name.trim() || !breed.trim() || !age.trim() || !weight.trim()) {
@@ -69,9 +128,7 @@ export default function PetModal({ visible, petToEdit, onClose, onSave }: PetMod
         gender,
         color: color.trim() || 'Indefinida',
         chip: chip.trim() || 'Não informado',
-        photo:
-          petToEdit?.photo ||
-          'https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=500&auto=format&fit=crop&q=60',
+        photo: photo.trim() || DEFAULT_PET_PHOTO,
       };
 
       await onSave(payload, petToEdit?.id);
@@ -110,6 +167,33 @@ export default function PetModal({ visible, petToEdit, onClose, onSave }: PetMod
             showsVerticalScrollIndicator={false}
             contentContainerStyle={styles.body}
           >
+            {/* Foto do Pet com ação de câmera/galeria */}
+            <TouchableOpacity
+              style={styles.photoContainer}
+              activeOpacity={0.8}
+              onPress={showImageOptions}
+            >
+              <View style={styles.avatarWrapper}>
+                <Image source={{ uri: photo }} style={styles.currentPhoto} />
+                <View style={styles.cameraIconBadge}>
+                  <Ionicons name="camera" size={15} color={Colors.white} />
+                </View>
+              </View>
+              <Text style={styles.photoHint}>Toque para alterar a foto</Text>
+            </TouchableOpacity>
+
+            {/* Botões de Câmera e Galeria */}
+            <View style={styles.photoActions}>
+              <TouchableOpacity style={styles.photoActionBtn} onPress={takePhoto}>
+                <Ionicons name="camera-outline" size={20} color={Colors.primary} />
+                <Text style={styles.photoActionText}>Câmera</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.photoActionBtn} onPress={pickFromGallery}>
+                <Ionicons name="images-outline" size={20} color={Colors.primary} />
+                <Text style={styles.photoActionText}>Galeria</Text>
+              </TouchableOpacity>
+            </View>
+
             <CustomInput
               label="Nome do Pet *"
               placeholder="Ex: Luna"
@@ -283,5 +367,59 @@ const styles = StyleSheet.create({
   },
   submitBtn: {
     marginTop: 10,
+  },
+  photoContainer: {
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  avatarWrapper: {
+    position: 'relative',
+  },
+  currentPhoto: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    borderWidth: 3,
+    borderColor: Colors.primary,
+  },
+  cameraIconBadge: {
+    position: 'absolute',
+    bottom: 2,
+    right: 2,
+    backgroundColor: Colors.primary,
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: Colors.white,
+  },
+  photoHint: {
+    fontSize: 12,
+    color: Colors.textMuted,
+    marginTop: 6,
+  },
+  photoActions: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    gap: 16,
+    marginBottom: 20,
+  },
+  photoActionBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderRadius: 10,
+    backgroundColor: Colors.primaryLight,
+    borderWidth: 1,
+    borderColor: Colors.primary,
+  },
+  photoActionText: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: Colors.primary,
   },
 });

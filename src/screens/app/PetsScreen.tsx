@@ -128,14 +128,20 @@ export default function PetsScreen() {
           }
           renderItem={({ item }) => (
             <View style={styles.card}>
-              <Image
-                source={{
-                  uri:
-                    item.photo ||
-                    'https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=500&auto=format&fit=crop&q=60',
-                }}
-                style={styles.photo}
-              />
+              <TouchableOpacity
+                activeOpacity={0.8}
+                onPress={() => handleOpenEdit(item)}
+                style={styles.photoContainer}
+              >
+                <Image
+                  source={{
+                    uri:
+                      item.photo ||
+                      'https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=500&auto=format&fit=crop&q=60',
+                  }}
+                  style={styles.photo}
+                />
+              </TouchableOpacity>
               <View style={styles.info}>
                 <View style={styles.topInfoRow}>
                   <Text style={styles.petName}>{item.name}</Text>
@@ -273,11 +279,14 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 3,
   },
+  photoContainer: {
+    position: 'relative',
+    marginRight: 14,
+  },
   photo: {
     width: 76,
     height: 76,
     borderRadius: 38,
-    marginRight: 14,
   },
   info: {
     flex: 1,
