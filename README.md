@@ -33,7 +33,7 @@
 ---
 
 ## 🎥 Link para o Vídeo de Demonstração (Sprint 3)
-> **[Clique aqui para assistir ao vídeo no YouTube]([INSERIR_LINK_DO_VIDEO_AQUI])**
+> **[Clique aqui para assistir ao vídeo no YouTube](https://youtu.be/XCqrmXJfXec?si=MtY9EM8bCtT9PeAC)**
 
 *(Vídeo narrado com duração máxima de 5 minutos demonstrando navegação, fluxo de autenticação e os dois CRUDs com dados reais em execução).*
 
