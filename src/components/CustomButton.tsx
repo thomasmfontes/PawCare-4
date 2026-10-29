@@ -6,7 +6,7 @@ import {
   StyleSheet,
   TouchableOpacityProps,
 } from 'react-native';
-import Colors from '../theme/Colors';
+import { useTheme } from '../hooks/useTheme';
 
 interface CustomButtonProps extends TouchableOpacityProps {
   title: string;
@@ -22,31 +22,33 @@ export default function CustomButton({
   style,
   ...rest
 }: CustomButtonProps) {
+  const { colors } = useTheme();
+
   const getBackgroundColor = () => {
-    if (disabled || loading) return Colors.border;
+    if (disabled || loading) return colors.border;
     switch (variant) {
       case 'secondary':
-        return Colors.primaryLight;
+        return colors.primaryLight;
       case 'danger':
-        return Colors.danger;
+        return colors.danger;
       case 'outline':
         return 'transparent';
       case 'primary':
       default:
-        return Colors.primary;
+        return colors.primary;
     }
   };
 
   const getTextColor = () => {
-    if (disabled || loading) return Colors.textMuted;
+    if (disabled || loading) return colors.textMuted;
     switch (variant) {
       case 'secondary':
       case 'outline':
-        return Colors.primary;
+        return colors.primary;
       case 'danger':
       case 'primary':
       default:
-        return Colors.white;
+        return '#FFFFFF';
     }
   };
 
@@ -55,7 +57,7 @@ export default function CustomButton({
       style={[
         styles.button,
         { backgroundColor: getBackgroundColor() },
-        variant === 'outline' && styles.outlineBorder,
+        variant === 'outline' && [styles.outlineBorder, { borderColor: colors.primary }],
         style,
       ]}
       disabled={disabled || loading}
@@ -63,10 +65,7 @@ export default function CustomButton({
       {...rest}
     >
       {loading ? (
-        <ActivityIndicator
-          size="small"
-          color={variant === 'secondary' || variant === 'outline' ? Colors.primary : Colors.white}
-        />
+        <ActivityIndicator color={getTextColor()} size="small" />
       ) : (
         <Text style={[styles.text, { color: getTextColor() }]}>{title}</Text>
       )}
@@ -80,16 +79,15 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 20,
-    marginVertical: 6,
+    width: '100%',
+    marginVertical: 4,
   },
   outlineBorder: {
     borderWidth: 1.5,
-    borderColor: Colors.primary,
   },
   text: {
     fontSize: 16,
     fontWeight: '700',
-    letterSpacing: 0.3,
+    letterSpacing: 0.2,
   },
 });

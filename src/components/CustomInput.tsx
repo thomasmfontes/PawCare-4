@@ -1,25 +1,39 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import { View, Text, TextInput, StyleSheet, TextInputProps } from 'react-native';
-import Colors from '../theme/Colors';
+import { useTheme } from '../hooks/useTheme';
 
-interface CustomInputProps extends TextInputProps {
+export interface CustomInputProps extends TextInputProps {
   label: string;
   error?: string;
 }
 
-export default function CustomInput({ label, error, style, ...rest }: CustomInputProps) {
+const CustomInput = forwardRef<TextInput, CustomInputProps>(({ label, error, style, ...rest }, ref) => {
+  const { colors } = useTheme();
+
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>{label}</Text>
+      <Text style={[styles.label, { color: colors.text }]}>{label}</Text>
       <TextInput
-        style={[styles.input, error ? styles.inputError : null, style]}
-        placeholderTextColor={Colors.textMuted}
+        ref={ref}
+        style={[
+          styles.input,
+          {
+            backgroundColor: colors.inputBg,
+            borderColor: colors.border,
+            color: colors.text,
+          },
+          error ? { borderColor: colors.danger, backgroundColor: colors.dangerLight } : null,
+          style,
+        ]}
+        placeholderTextColor={colors.textMuted}
         {...rest}
       />
-      {error ? <Text style={styles.errorText}>{error}</Text> : null}
+      {error ? <Text style={[styles.errorText, { color: colors.danger }]}>{error}</Text> : null}
     </View>
   );
-}
+});
+
+export default CustomInput;
 
 const styles = StyleSheet.create({
   container: {
@@ -29,25 +43,16 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 14,
     fontWeight: '600',
-    color: Colors.text,
     marginBottom: 6,
   },
   input: {
-    backgroundColor: Colors.inputBg,
     borderWidth: 1,
-    borderColor: Colors.border,
     borderRadius: 10,
     paddingHorizontal: 14,
     paddingVertical: 12,
     fontSize: 15,
-    color: Colors.text,
-  },
-  inputError: {
-    borderColor: Colors.danger,
-    backgroundColor: Colors.dangerLight,
   },
   errorText: {
-    color: Colors.danger,
     fontSize: 12,
     marginTop: 4,
     fontWeight: '500',
