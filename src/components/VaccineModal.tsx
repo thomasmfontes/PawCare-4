@@ -3,6 +3,7 @@ import {
   Modal,
   View,
   Text,
+  Image,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
@@ -11,13 +12,19 @@ import {
   Alert,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import Colors from '../theme/Colors';
+import { useTheme } from '../hooks/useTheme';
 import CustomInput from './CustomInput';
 import CustomButton from './CustomButton';
 import { Vaccine, VaccinePayload } from '../types/vaccine';
+import { Pet } from '../types/pet';
+import { formatDateMask } from '../utils/masks';
+
+const DEFAULT_PET_PHOTO =
+  'https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=500&auto=format&fit=crop&q=60';
 
 interface VaccineModalProps {
   visible: boolean;
+  pets: Pet[];
   vaccineToEdit?: Vaccine | null;
   onClose: () => void;
   onSave: (payload: VaccinePayload, vaccineId?: string) => Promise<void>;
@@ -25,10 +32,13 @@ interface VaccineModalProps {
 
 export default function VaccineModal({
   visible,
+  pets,
   vaccineToEdit,
   onClose,
   onSave,
 }: VaccineModalProps) {
+  const { colors, isDark } = useTheme();
+  const [selectedPetId, setSelectedPetId] = useState<string>('');
   const [name, setName] = useState('');
   const [date, setDate] = useState('');
   const [nextDate, setNextDate] = useState('');
@@ -40,6 +50,7 @@ export default function VaccineModal({
 
   useEffect(() => {
     if (vaccineToEdit) {
+      setSelectedPetId(vaccineToEdit.petId || (pets.length > 0 ? pets[0].id : ''));
       setName(vaccineToEdit.name || '');
       setDate(vaccineToEdit.date || '');
       setNextDate(vaccineToEdit.nextDate || '');
@@ -48,6 +59,7 @@ export default function VaccineModal({
       setClinic(vaccineToEdit.clinic || '');
       setNotes(vaccineToEdit.notes || '');
     } else {
+      setSelectedPetId(pets.length > 0 ? pets[0].id : '');
       setName('');
       setDate('');
       setNextDate('');
@@ -56,14 +68,9 @@ export default function VaccineModal({
       setClinic('');
       setNotes('');
     }
-  }, [vaccineToEdit, visible]);
+  }, [vaccineToEdit, visible, pets]);
 
-  const formatDateMask = (value: string): string => {
-    const digits = value.replace(/\D/g, '').slice(0, 8);
-    if (digits.length <= 2) return digits;
-    if (digits.length <= 4) return `${digits.slice(0, 2)}/${digits.slice(2)}`;
-    return `${digits.slice(0, 2)}/${digits.slice(2, 4)}/${digits.slice(4)}`;
-  };
+
 
   const handleSubmit = async () => {
     if (!name.trim() || !nextDate.trim()) {
@@ -84,6 +91,7 @@ export default function VaccineModal({
     try {
       setLoading(true);
       const payload: VaccinePayload = {
+        petId: selectedPetId || (pets.length > 0 ? pets[0].id : undefined),
         name: name.trim(),
         date: date.trim(),
         nextDate: nextDate.trim(),
@@ -111,24 +119,66 @@ export default function VaccineModal({
       onRequestClose={onClose}
     >
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.overlay}
       >
-        <View style={styles.content}>
-          <View style={styles.header}>
-            <Text style={styles.title}>
+        <View style={[styles.content, { backgroundColor: colors.cardBg, borderColor: colors.border }]}>
+          <View style={[styles.header, { borderBottomColor: colors.border }]}>
+            <Text style={[styles.title, { color: colors.text }]}>
               {vaccineToEdit ? 'Editar Registro de Vacina' : 'Registrar Nova Vacina'}
             </Text>
             <TouchableOpacity onPress={onClose} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
-              <Ionicons name="close" size={24} color={Colors.textLight} />
+              <Ionicons name="close" size={24} color={colors.textLight} />
             </TouchableOpacity>
           </View>
 
           <ScrollView
             style={styles.scrollView}
+            keyboardShouldPersistTaps="handled"
             showsVerticalScrollIndicator={false}
             contentContainerStyle={styles.body}
           >
+            {/* Seletor de Pet */}
+            {pets.length > 0 && (
+              <View style={styles.petSection}>
+                <Text style={[styles.label, { color: colors.text }]}>Selecione o Pet *</Text>
+                <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.petScroll}>
+                  {pets.map((p) => {
+                    const isSelected = p.id === selectedPetId;
+                    return (
+                      <TouchableOpacity
+                        key={p.id}
+                        style={[
+                          styles.petChip,
+                          {
+                            backgroundColor: isSelected ? colors.primary : colors.inputBg,
+                            borderColor: isSelected ? colors.primary : colors.border,
+                          },
+                        ]}
+                        onPress={() => setSelectedPetId(p.id)}
+                      >
+                        <Image
+                          source={{ uri: p.photo || DEFAULT_PET_PHOTO }}
+                          style={styles.petChipAvatar}
+                        />
+                        <Text
+                          style={[
+                            styles.petChipText,
+                            { color: isSelected ? '#FFFFFF' : colors.text },
+                          ]}
+                        >
+                          {p.name}
+                        </Text>
+                        {isSelected && (
+                          <Ionicons name="checkmark-circle" size={16} color="#FFFFFF" style={{ marginLeft: 4 }} />
+                        )}
+                      </TouchableOpacity>
+                    );
+                  })}
+                </ScrollView>
+              </View>
+            )}
+
             <CustomInput
               label="Nome da Vacina *"
               placeholder="Ex: V10 (Décupla)"
@@ -136,16 +186,24 @@ export default function VaccineModal({
               onChangeText={setName}
             />
 
-            <Text style={styles.label}>Status da Vacina *</Text>
+            <Text style={[styles.label, { color: colors.text }]}>Status da Vacina *</Text>
             <View style={styles.statusRow}>
               <TouchableOpacity
                 style={[
                   styles.statusBtn,
-                  status === 'done' && { backgroundColor: Colors.success, borderColor: Colors.success },
+                  {
+                    backgroundColor: status === 'done' ? colors.success : colors.inputBg,
+                    borderColor: status === 'done' ? colors.success : colors.border,
+                  },
                 ]}
                 onPress={() => setStatus('done')}
               >
-                <Text style={[styles.statusText, status === 'done' && styles.statusTextActive]}>
+                <Text
+                  style={[
+                    styles.statusText,
+                    { color: status === 'done' ? '#FFFFFF' : colors.text },
+                  ]}
+                >
                   Aplicada
                 </Text>
               </TouchableOpacity>
@@ -153,23 +211,39 @@ export default function VaccineModal({
               <TouchableOpacity
                 style={[
                   styles.statusBtn,
-                  status === 'pending' && { backgroundColor: Colors.warning, borderColor: Colors.warning },
+                  {
+                    backgroundColor: status === 'pending' ? colors.warning : colors.inputBg,
+                    borderColor: status === 'pending' ? colors.warning : colors.border,
+                  },
                 ]}
                 onPress={() => setStatus('pending')}
               >
-                <Text style={[styles.statusText, status === 'pending' && styles.statusTextActive]}>
-                  Pendente
+                <Text
+                  style={[
+                    styles.statusText,
+                    { color: status === 'pending' ? '#FFFFFF' : colors.text },
+                  ]}
+                >
+                  Agendada
                 </Text>
               </TouchableOpacity>
 
               <TouchableOpacity
                 style={[
                   styles.statusBtn,
-                  status === 'overdue' && { backgroundColor: Colors.danger, borderColor: Colors.danger },
+                  {
+                    backgroundColor: status === 'overdue' ? colors.danger : colors.inputBg,
+                    borderColor: status === 'overdue' ? colors.danger : colors.border,
+                  },
                 ]}
                 onPress={() => setStatus('overdue')}
               >
-                <Text style={[styles.statusText, status === 'overdue' && styles.statusTextActive]}>
+                <Text
+                  style={[
+                    styles.statusText,
+                    { color: status === 'overdue' ? '#FFFFFF' : colors.text },
+                  ]}
+                >
                   Atrasada
                 </Text>
               </TouchableOpacity>
@@ -178,12 +252,12 @@ export default function VaccineModal({
             <View style={styles.row}>
               <View style={styles.flex1}>
                 <CustomInput
-                  label="Data Aplicação"
+                  label="Data de Aplicação"
                   placeholder="DD/MM/AAAA"
                   keyboardType="numeric"
                   maxLength={10}
                   value={date}
-                  onChangeText={(text) => setDate(formatDateMask(text))}
+                  onChangeText={(val) => setDate(formatDateMask(val))}
                 />
               </View>
               <View style={styles.spacing} />
@@ -194,36 +268,36 @@ export default function VaccineModal({
                   keyboardType="numeric"
                   maxLength={10}
                   value={nextDate}
-                  onChangeText={(text) => setNextDate(formatDateMask(text))}
+                  onChangeText={(val) => setNextDate(formatDateMask(val))}
                 />
               </View>
             </View>
 
             <CustomInput
               label="Veterinário Responsável"
-              placeholder="Ex: Dr. Gabriel Maciel"
+              placeholder="Ex: Dra. Mariana Lima"
               value={veterinarian}
               onChangeText={setVeterinarian}
             />
 
             <CustomInput
-              label="Clínica Veterinária"
-              placeholder="Ex: Clínica VetSaúde"
+              label="Clínica / Local"
+              placeholder="Ex: Clínica Veterinária São Francisco"
               value={clinic}
               onChangeText={setClinic}
             />
 
             <CustomInput
-              label="Observações Clínicas"
-              placeholder="Ex: Reforço anual obrigatório"
-              value={notes}
-              onChangeText={setNotes}
+              label="Observações / Lote"
+              placeholder="Ex: Lote 459/2026 - Nenhuma reação adversa"
               multiline
               numberOfLines={3}
+              value={notes}
+              onChangeText={setNotes}
             />
 
             <CustomButton
-              title={vaccineToEdit ? 'Salvar Alterações' : 'Salvar Registro'}
+              title={vaccineToEdit ? 'Salvar Alterações' : 'Registrar Vacina'}
               loading={loading}
               onPress={handleSubmit}
               style={styles.submitBtn}
@@ -238,15 +312,15 @@ export default function VaccineModal({
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(13, 43, 82, 0.6)',
+    backgroundColor: 'rgba(13, 43, 82, 0.65)',
     justifyContent: 'flex-end',
   },
   content: {
-    backgroundColor: Colors.white,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     height: '92%',
     paddingBottom: Platform.OS === 'android' ? 30 : 36,
+    borderTopWidth: 1,
   },
   header: {
     flexDirection: 'row',
@@ -254,12 +328,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 20,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.borderLight,
   },
   title: {
     fontSize: 18,
     fontWeight: '700',
-    color: Colors.text,
   },
   scrollView: {
     flex: 1,
@@ -267,6 +339,32 @@ const styles = StyleSheet.create({
   body: {
     padding: 20,
     paddingBottom: 40,
+  },
+  petSection: {
+    marginBottom: 16,
+  },
+  petScroll: {
+    flexDirection: 'row',
+    marginTop: 4,
+  },
+  petChip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 20,
+    borderWidth: 1,
+    marginRight: 10,
+  },
+  petChipAvatar: {
+    width: 26,
+    height: 26,
+    borderRadius: 13,
+    marginRight: 8,
+  },
+  petChipText: {
+    fontSize: 14,
+    fontWeight: '600',
   },
   row: {
     flexDirection: 'row',
@@ -280,7 +378,6 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 14,
     fontWeight: '600',
-    color: Colors.text,
     marginBottom: 8,
   },
   statusRow: {
@@ -290,21 +387,15 @@ const styles = StyleSheet.create({
   },
   statusBtn: {
     flex: 1,
-    height: 40,
-    borderRadius: 8,
-    backgroundColor: Colors.inputBg,
+    height: 42,
+    borderRadius: 10,
     borderWidth: 1,
-    borderColor: Colors.border,
     justifyContent: 'center',
     alignItems: 'center',
   },
   statusText: {
     fontSize: 13,
     fontWeight: '600',
-    color: Colors.textBody,
-  },
-  statusTextActive: {
-    color: Colors.white,
   },
   submitBtn: {
     marginTop: 10,

@@ -13,10 +13,11 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
-import Colors from '../theme/Colors';
+import { useTheme } from '../hooks/useTheme';
 import CustomInput from './CustomInput';
 import CustomButton from './CustomButton';
 import { Pet, PetPayload } from '../types/pet';
+import { formatAgeMask, formatWeightMask, formatMicrochipMask } from '../utils/masks';
 
 const DEFAULT_PET_PHOTO =
   'https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=500&auto=format&fit=crop&q=60';
@@ -29,6 +30,7 @@ interface PetModalProps {
 }
 
 export default function PetModal({ visible, petToEdit, onClose, onSave }: PetModalProps) {
+  const { colors, isDark } = useTheme();
   const [name, setName] = useState('');
   const [breed, setBreed] = useState('');
   const [age, setAge] = useState('');
@@ -61,12 +63,18 @@ export default function PetModal({ visible, petToEdit, onClose, onSave }: PetMod
     }
   }, [petToEdit, visible]);
 
+  const requestPermissions = async () => {
+    const cameraRoll = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    const camera = await ImagePicker.requestCameraPermissionsAsync();
+    return cameraRoll.status === 'granted' && camera.status === 'granted';
+  };
+
   const pickFromGallery = async () => {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== 'granted') {
+    const hasPermission = await requestPermissions();
+    if (!hasPermission) {
       Alert.alert(
         'Permissão Necessária',
-        'Precisamos de acesso à sua galeria para selecionar uma foto.'
+        'Conceda permissão à galeria nas configurações para selecionar fotos.'
       );
       return;
     }
@@ -75,20 +83,20 @@ export default function PetModal({ visible, petToEdit, onClose, onSave }: PetMod
       mediaTypes: ['images'],
       allowsEditing: true,
       aspect: [1, 1],
-      quality: 0.8,
+      quality: 0.7,
     });
 
-    if (!result.canceled && result.assets[0]) {
+    if (!result.canceled && result.assets && result.assets[0].uri) {
       setPhoto(result.assets[0].uri);
     }
   };
 
   const takePhoto = async () => {
-    const { status } = await ImagePicker.requestCameraPermissionsAsync();
-    if (status !== 'granted') {
+    const hasPermission = await requestPermissions();
+    if (!hasPermission) {
       Alert.alert(
         'Permissão Necessária',
-        'Precisamos de acesso à câmera para tirar uma foto.'
+        'Conceda permissão à câmera nas configurações para tirar fotos.'
       );
       return;
     }
@@ -96,17 +104,17 @@ export default function PetModal({ visible, petToEdit, onClose, onSave }: PetMod
     const result = await ImagePicker.launchCameraAsync({
       allowsEditing: true,
       aspect: [1, 1],
-      quality: 0.8,
+      quality: 0.7,
     });
 
-    if (!result.canceled && result.assets[0]) {
+    if (!result.canceled && result.assets && result.assets[0].uri) {
       setPhoto(result.assets[0].uri);
     }
   };
 
   const showImageOptions = () => {
-    Alert.alert('Foto do Pet', 'Escolha de onde deseja selecionar a foto:', [
-      { text: 'Câmera', onPress: takePhoto },
+    Alert.alert('Foto do Pet', 'Como deseja adicionar a foto?', [
+      { text: 'Tirar Foto', onPress: takePhoto },
       { text: 'Galeria', onPress: pickFromGallery },
       { text: 'Cancelar', style: 'cancel' },
     ]);
@@ -149,21 +157,22 @@ export default function PetModal({ visible, petToEdit, onClose, onSave }: PetMod
       onRequestClose={onClose}
     >
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.overlay}
       >
-        <View style={styles.content}>
-          <View style={styles.header}>
-            <Text style={styles.title}>
+        <View style={[styles.content, { backgroundColor: colors.cardBg, borderColor: colors.border }]}>
+          <View style={[styles.header, { borderBottomColor: colors.border }]}>
+            <Text style={[styles.title, { color: colors.text }]}>
               {petToEdit ? 'Editar Pet' : 'Cadastrar Novo Pet'}
             </Text>
             <TouchableOpacity onPress={onClose} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
-              <Ionicons name="close" size={24} color={Colors.textLight} />
+              <Ionicons name="close" size={24} color={colors.textLight} />
             </TouchableOpacity>
           </View>
 
           <ScrollView
             style={styles.scrollView}
+            keyboardShouldPersistTaps="handled"
             showsVerticalScrollIndicator={false}
             contentContainerStyle={styles.body}
           >
@@ -174,23 +183,41 @@ export default function PetModal({ visible, petToEdit, onClose, onSave }: PetMod
               onPress={showImageOptions}
             >
               <View style={styles.avatarWrapper}>
-                <Image source={{ uri: photo }} style={styles.currentPhoto} />
-                <View style={styles.cameraIconBadge}>
-                  <Ionicons name="camera" size={15} color={Colors.white} />
+                <Image source={{ uri: photo }} style={[styles.currentPhoto, { borderColor: colors.primary }]} />
+                <View style={[styles.cameraIconBadge, { backgroundColor: colors.primary, borderColor: colors.cardBg }]}>
+                  <Ionicons name="camera" size={15} color="#FFFFFF" />
                 </View>
               </View>
-              <Text style={styles.photoHint}>Toque para alterar a foto</Text>
+              <Text style={[styles.photoHint, { color: colors.textMuted }]}>Toque para alterar a foto</Text>
             </TouchableOpacity>
 
             {/* Botões de Câmera e Galeria */}
             <View style={styles.photoActions}>
-              <TouchableOpacity style={styles.photoActionBtn} onPress={takePhoto}>
-                <Ionicons name="camera-outline" size={20} color={Colors.primary} />
-                <Text style={styles.photoActionText}>Câmera</Text>
+              <TouchableOpacity
+                style={[
+                  styles.photoActionBtn,
+                  {
+                    backgroundColor: isDark ? colors.background : colors.primaryLight,
+                    borderColor: colors.primary,
+                  },
+                ]}
+                onPress={takePhoto}
+              >
+                <Ionicons name="camera-outline" size={20} color={colors.primary} />
+                <Text style={[styles.photoActionText, { color: colors.primary }]}>Câmera</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.photoActionBtn} onPress={pickFromGallery}>
-                <Ionicons name="images-outline" size={20} color={Colors.primary} />
-                <Text style={styles.photoActionText}>Galeria</Text>
+              <TouchableOpacity
+                style={[
+                  styles.photoActionBtn,
+                  {
+                    backgroundColor: isDark ? colors.background : colors.primaryLight,
+                    borderColor: colors.primary,
+                  },
+                ]}
+                onPress={pickFromGallery}
+              >
+                <Ionicons name="images-outline" size={20} color={colors.primary} />
+                <Text style={[styles.photoActionText, { color: colors.primary }]}>Galeria</Text>
               </TouchableOpacity>
             </View>
 
@@ -215,7 +242,8 @@ export default function PetModal({ visible, petToEdit, onClose, onSave }: PetMod
                   placeholder="Ex: 5"
                   keyboardType="numeric"
                   value={age}
-                  onChangeText={setAge}
+                  onChangeText={(val) => setAge(formatAgeMask(val))}
+                  maxLength={2}
                 />
               </View>
               <View style={styles.spacing} />
@@ -225,37 +253,60 @@ export default function PetModal({ visible, petToEdit, onClose, onSave }: PetMod
                   placeholder="Ex: 28.5"
                   keyboardType="numeric"
                   value={weight}
-                  onChangeText={setWeight}
+                  onChangeText={(val) => setWeight(formatWeightMask(val))}
+                  maxLength={5}
                 />
               </View>
             </View>
 
-            <Text style={styles.label}>Gênero *</Text>
+            <Text style={[styles.label, { color: colors.text }]}>Gênero *</Text>
             <View style={styles.genderRow}>
               <TouchableOpacity
-                style={[styles.genderBtn, gender === 'Fêmea' && styles.genderBtnActive]}
+                style={[
+                  styles.genderBtn,
+                  {
+                    backgroundColor: gender === 'Fêmea' ? colors.primary : colors.inputBg,
+                    borderColor: gender === 'Fêmea' ? colors.primary : colors.border,
+                  },
+                ]}
                 onPress={() => setGender('Fêmea')}
               >
                 <Ionicons
                   name="female"
                   size={18}
-                  color={gender === 'Fêmea' ? Colors.white : Colors.textBody}
+                  color={gender === 'Fêmea' ? '#FFFFFF' : colors.textLight}
                 />
-                <Text style={[styles.genderText, gender === 'Fêmea' && styles.genderTextActive]}>
+                <Text
+                  style={[
+                    styles.genderText,
+                    { color: gender === 'Fêmea' ? '#FFFFFF' : colors.text },
+                  ]}
+                >
                   Fêmea
                 </Text>
               </TouchableOpacity>
 
               <TouchableOpacity
-                style={[styles.genderBtn, gender === 'Macho' && styles.genderBtnActive]}
+                style={[
+                  styles.genderBtn,
+                  {
+                    backgroundColor: gender === 'Macho' ? colors.primary : colors.inputBg,
+                    borderColor: gender === 'Macho' ? colors.primary : colors.border,
+                  },
+                ]}
                 onPress={() => setGender('Macho')}
               >
                 <Ionicons
                   name="male"
                   size={18}
-                  color={gender === 'Macho' ? Colors.white : Colors.textBody}
+                  color={gender === 'Macho' ? '#FFFFFF' : colors.textLight}
                 />
-                <Text style={[styles.genderText, gender === 'Macho' && styles.genderTextActive]}>
+                <Text
+                  style={[
+                    styles.genderText,
+                    { color: gender === 'Macho' ? '#FFFFFF' : colors.text },
+                  ]}
+                >
                   Macho
                 </Text>
               </TouchableOpacity>
@@ -271,8 +322,10 @@ export default function PetModal({ visible, petToEdit, onClose, onSave }: PetMod
             <CustomInput
               label="Microchip (opcional)"
               placeholder="Ex: 985112004567890"
+              keyboardType="numeric"
               value={chip}
-              onChangeText={setChip}
+              onChangeText={(val) => setChip(formatMicrochipMask(val))}
+              maxLength={15}
             />
 
             <CustomButton
@@ -291,15 +344,15 @@ export default function PetModal({ visible, petToEdit, onClose, onSave }: PetMod
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(13, 43, 82, 0.6)',
+    backgroundColor: 'rgba(13, 43, 82, 0.65)',
     justifyContent: 'flex-end',
   },
   content: {
-    backgroundColor: Colors.white,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     height: '92%',
     paddingBottom: Platform.OS === 'android' ? 30 : 36,
+    borderTopWidth: 1,
   },
   header: {
     flexDirection: 'row',
@@ -307,12 +360,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 20,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.borderLight,
   },
   title: {
     fontSize: 18,
     fontWeight: '700',
-    color: Colors.text,
   },
   scrollView: {
     flex: 1,
@@ -333,7 +384,6 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 14,
     fontWeight: '600',
-    color: Colors.text,
     marginBottom: 8,
   },
   genderRow: {
@@ -349,21 +399,11 @@ const styles = StyleSheet.create({
     gap: 8,
     height: 44,
     borderRadius: 10,
-    backgroundColor: Colors.inputBg,
     borderWidth: 1,
-    borderColor: Colors.border,
-  },
-  genderBtnActive: {
-    backgroundColor: Colors.primary,
-    borderColor: Colors.primary,
   },
   genderText: {
     fontSize: 14,
     fontWeight: '600',
-    color: Colors.textBody,
-  },
-  genderTextActive: {
-    color: Colors.white,
   },
   submitBtn: {
     marginTop: 10,
@@ -380,24 +420,20 @@ const styles = StyleSheet.create({
     height: 100,
     borderRadius: 50,
     borderWidth: 3,
-    borderColor: Colors.primary,
   },
   cameraIconBadge: {
     position: 'absolute',
     bottom: 2,
     right: 2,
-    backgroundColor: Colors.primary,
     width: 30,
     height: 30,
     borderRadius: 15,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 2,
-    borderColor: Colors.white,
   },
   photoHint: {
     fontSize: 12,
-    color: Colors.textMuted,
     marginTop: 6,
   },
   photoActions: {
@@ -413,13 +449,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderRadius: 10,
-    backgroundColor: Colors.primaryLight,
     borderWidth: 1,
-    borderColor: Colors.primary,
   },
   photoActionText: {
     fontSize: 13,
     fontWeight: '600',
-    color: Colors.primary,
   },
 });
