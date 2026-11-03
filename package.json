@@ -6,9 +6,11 @@
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "postinstall": "node scripts/patch-expo-notifications.js && node scripts/patch-metro-resolver.js"
   },
   "dependencies": {
+    "@babel/runtime": "^7.29.10",
     "@expo/vector-icons": "^15.0.3",
     "@react-native-async-storage/async-storage": "2.2.0",
     "@react-navigation/bottom-tabs": "^6.5.20",
@@ -18,8 +20,10 @@
     "axios": "^1.8.1",
     "expo": "~57.0.21",
     "expo-constants": "~57.0.17",
+    "expo-font": "~57.0.4",
     "expo-image-picker": "~57.0.17",
     "expo-linking": "~57.0.9",
+    "expo-notifications": "~57.0.24",
     "expo-status-bar": "~57.0.1",
     "react": "19.2.3",
     "react-dom": "19.2.3",

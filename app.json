@@ -5,8 +5,7 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "scheme": "pawcare",
-    "userInterfaceStyle": "light",
-    "newArchEnabled": true,
+    "userInterfaceStyle": "automatic",
     "splash": {
       "backgroundColor": "#0D2B52"
     },
@@ -17,7 +16,8 @@
       "package": "com.thomasfontes.pawcare",
       "adaptiveIcon": {
         "backgroundColor": "#0D2B52"
-      }
+      },
+      "softwareKeyboardLayoutMode": "resize"
     },
     "plugins": [
       "expo-status-bar",
@@ -27,7 +27,15 @@
           "photosPermission": "O PawCare precisa de acesso à galeria para você selecionar a foto do seu pet.",
           "cameraPermission": "O PawCare precisa de acesso à câmera para você tirar uma foto do seu pet."
         }
-      ]
+      ],
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/icon.png",
+          "color": "#2F6BFF"
+        }
+      ],
+      "expo-font"
     ],
     "extra": {
       "eas": {
