@@ -25,6 +25,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       try {
         const storedUser = await authService.getSession();
         if (storedUser) {
+          // Tenta renovar o token automaticamente caso tenha expirado
+          if (storedUser.refreshToken) {
+            const refreshed = await authService.refreshToken(storedUser.refreshToken);
+            if (refreshed) {
+              setUser(refreshed);
+              return;
+            }
+          }
           setUser(storedUser);
         }
       } catch (error) {

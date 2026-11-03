@@ -30,6 +30,32 @@ export const authService = {
     return user;
   },
 
+  // Renova o token de acesso expirado usando o refreshToken
+  refreshToken: async (tokenToRefresh: string): Promise<AuthUser | null> => {
+    try {
+      const response = await axios.post(
+        AUTH_ENDPOINTS.REFRESH,
+        `grant_type=refresh_token&refresh_token=${tokenToRefresh}`,
+        {
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        }
+      );
+      const data = response.data;
+      const stored = await authService.getSession();
+      if (!stored) return null;
+      const updatedUser: AuthUser = {
+        ...stored,
+        idToken: data.id_token,
+        refreshToken: data.refresh_token,
+        expiresIn: data.expires_in,
+      };
+      await authService.saveSession(updatedUser);
+      return updatedUser;
+    } catch {
+      return null;
+    }
+  },
+
   // Salva sessão localmente no AsyncStorage (requisito do edital)
   saveSession: async (user: AuthUser): Promise<void> => {
     await AsyncStorage.setItem(STORAGE_KEY_USER, JSON.stringify(user));

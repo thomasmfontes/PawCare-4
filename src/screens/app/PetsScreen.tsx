@@ -11,12 +11,16 @@ import {
   RefreshControl,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import Colors from '../../theme/Colors';
 import { usePets } from '../../hooks/usePets';
+import { useTheme } from '../../hooks/useTheme';
+import { useNotifications } from '../../hooks/useNotifications';
 import PetModal from '../../components/PetModal';
 import { Pet, PetPayload } from '../../types/pet';
 
 export default function PetsScreen() {
+  const { colors, isDark } = useTheme();
+  const { sendNotification } = useNotifications();
+
   const {
     pets,
     isLoading,
@@ -32,6 +36,21 @@ export default function PetsScreen() {
 
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedPet, setSelectedPet] = useState<Pet | null>(null);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    try {
+      await Promise.all([
+        refetch(),
+        new Promise((resolve) => setTimeout(resolve, 600)),
+      ]);
+    } catch (e) {
+      console.warn('Erro ao atualizar pets:', e);
+    } finally {
+      setRefreshing(false);
+    }
+  };
 
   const handleOpenCreate = () => {
     setSelectedPet(null);
@@ -49,6 +68,11 @@ export default function PetsScreen() {
       Alert.alert('Sucesso', 'Pet atualizado com sucesso!');
     } else {
       await createPet(payload);
+      await sendNotification(
+        '🐾 Pet Cadastrado com Sucesso!',
+        `${payload.name} foi adicionado ao PawCare. Não esqueça de verificar a carteira de vacinas!`,
+        { screen: 'Pets' }
+      );
       Alert.alert('Sucesso', 'Pet cadastrado com sucesso!');
     }
   };
@@ -76,33 +100,33 @@ export default function PetsScreen() {
   };
 
   return (
-    <View style={styles.container}>
-      {/* Header padronizado de 140px como avaliado no PawCare */}
-      <View style={styles.header}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
+      {/* Header superior */}
+      <View style={[styles.header, { backgroundColor: colors.darkBlue }]}>
         <View style={styles.headerRow}>
           <View>
             <Text style={styles.title}>Meus Pets</Text>
             <Text style={styles.subtitle}>Gerenciamento completo e seguro</Text>
           </View>
           <TouchableOpacity style={styles.addBtn} onPress={handleOpenCreate}>
-            <Ionicons name="add" size={24} color={Colors.white} />
+            <Ionicons name="add" size={24} color="#FFFFFF" />
           </TouchableOpacity>
         </View>
       </View>
 
-      {/* Exibição dos 3 status da consulta: Loading, Erro ou FlatList */}
+      {/* Conteúdo */}
       {isLoading ? (
         <View style={styles.center}>
-          <ActivityIndicator size="large" color={Colors.primary} />
-          <Text style={styles.loadingText}>Carregando pets...</Text>
+          <ActivityIndicator size="large" color={colors.primary} />
+          <Text style={[styles.loadingText, { color: colors.textLight }]}>Carregando pets...</Text>
         </View>
       ) : isError ? (
         <View style={styles.center}>
-          <Ionicons name="alert-circle-outline" size={48} color={Colors.danger} />
-          <Text style={styles.errorText}>
-            Erro ao carregar pets: {(error as Error)?.message || 'Falha na requisição'}
+          <Ionicons name="alert-circle-outline" size={48} color={colors.danger} />
+          <Text style={[styles.errorText, { color: colors.danger }]}>
+            Erro ao carregar pets: {(error as Error)?.message || 'Falha na conexão'}
           </Text>
-          <TouchableOpacity style={styles.retryBtn} onPress={() => refetch()}>
+          <TouchableOpacity style={[styles.retryBtn, { backgroundColor: colors.primary }]} onPress={() => refetch()}>
             <Text style={styles.retryText}>Tentar Novamente</Text>
           </TouchableOpacity>
         </View>
@@ -112,27 +136,41 @@ export default function PetsScreen() {
           keyExtractor={(item) => item.id}
           contentContainerStyle={styles.list}
           refreshControl={
-            <RefreshControl refreshing={isRefetching} onRefresh={refetch} colors={[Colors.primary]} />
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={handleRefresh}
+              colors={[colors.primary]}
+              tintColor={colors.primary}
+              progressBackgroundColor={colors.cardBg}
+            />
           }
           ListEmptyComponent={
             <View style={styles.emptyState}>
-              <Ionicons name="paw-outline" size={56} color={Colors.textMuted} />
-              <Text style={styles.emptyTitle}>Nenhum pet cadastrado</Text>
-              <Text style={styles.emptySubtitle}>
-                Cadastre seu pet agora para acompanhar vacinas e consultas.
+              <Ionicons name="paw-outline" size={56} color={colors.textMuted} />
+              <Text style={[styles.emptyTitle, { color: colors.text }]}>Nenhum pet cadastrado</Text>
+              <Text style={[styles.emptySubtitle, { color: colors.textLight }]}>
+                Toque no botão "+" no canto superior para registrar seu primeiro amigo de quatro patas.
               </Text>
-              <TouchableOpacity style={styles.createFirstBtn} onPress={handleOpenCreate}>
-                <Text style={styles.createFirstBtnText}>Cadastrar Pet</Text>
+              <TouchableOpacity
+                style={[styles.createFirstBtn, { backgroundColor: colors.primary }]}
+                onPress={handleOpenCreate}
+              >
+                <Text style={styles.createFirstBtnText}>Cadastrar Primeiro Pet</Text>
               </TouchableOpacity>
             </View>
           }
           renderItem={({ item }) => (
-            <View style={styles.card}>
-              <TouchableOpacity
-                activeOpacity={0.8}
-                onPress={() => handleOpenEdit(item)}
-                style={styles.photoContainer}
-              >
+            <View
+              style={[
+                styles.card,
+                {
+                  backgroundColor: colors.cardBg,
+                  borderColor: colors.border,
+                  borderWidth: isDark ? 1 : 0,
+                },
+              ]}
+            >
+              <View style={styles.photoContainer}>
                 <Image
                   source={{
                     uri:
@@ -141,39 +179,45 @@ export default function PetsScreen() {
                   }}
                   style={styles.photo}
                 />
-              </TouchableOpacity>
+              </View>
+
               <View style={styles.info}>
                 <View style={styles.topInfoRow}>
-                  <Text style={styles.petName}>{item.name}</Text>
-                  <View style={styles.genderBadge}>
-                    <Text style={styles.genderBadgeText}>{item.gender}</Text>
+                  <Text style={[styles.petName, { color: colors.text }]}>{item.name}</Text>
+                  <View style={[styles.genderBadge, { backgroundColor: colors.primaryLight }]}>
+                    <Text style={[styles.genderBadgeText, { color: colors.primary }]}>{item.gender}</Text>
                   </View>
                 </View>
-                <Text style={styles.breed}>{item.breed}</Text>
+                <Text style={[styles.breed, { color: colors.textLight }]}>{item.breed}</Text>
                 <View style={styles.metaRow}>
-                  <Text style={styles.metaPill}>{item.age} anos</Text>
-                  <Text style={styles.metaPill}>{item.weight} kg</Text>
-                  <Text style={styles.metaPill}>{item.color}</Text>
+                  <Text style={[styles.metaPill, { backgroundColor: colors.inputBg, color: colors.textBody }]}>
+                    {item.age} anos
+                  </Text>
+                  <Text style={[styles.metaPill, { backgroundColor: colors.inputBg, color: colors.textBody }]}>
+                    {item.weight} kg
+                  </Text>
+                  <Text style={[styles.metaPill, { backgroundColor: colors.inputBg, color: colors.textBody }]}>
+                    {item.color}
+                  </Text>
                 </View>
                 {item.chip ? (
-                  <Text style={styles.chipText}>Chip: {item.chip}</Text>
+                  <Text style={[styles.chipText, { color: colors.textMuted }]}>Chip: {item.chip}</Text>
                 ) : null}
               </View>
+
               <View style={styles.actions}>
                 <TouchableOpacity
-                  style={styles.actionBtn}
+                  style={[styles.actionBtn, { backgroundColor: colors.primaryLight }]}
                   onPress={() => handleOpenEdit(item)}
-                  hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
                 >
-                  <Ionicons name="pencil" size={18} color={Colors.primary} />
+                  <Ionicons name="pencil-outline" size={16} color={colors.primary} />
                 </TouchableOpacity>
                 <TouchableOpacity
-                  style={[styles.actionBtn, styles.deleteBtn]}
+                  style={[styles.actionBtn, styles.deleteBtn, { backgroundColor: colors.dangerLight }]}
                   onPress={() => handleDeletePet(item)}
                   disabled={isDeleting}
-                  hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
                 >
-                  <Ionicons name="trash-outline" size={18} color={Colors.danger} />
+                  <Ionicons name="trash-outline" size={16} color={colors.danger} />
                 </TouchableOpacity>
               </View>
             </View>
@@ -181,7 +225,7 @@ export default function PetsScreen() {
         />
       )}
 
-      {/* Modal Reutilizável de Cadastro/Edição de Pet */}
+      {/* Modal Reutilizável de Formulário */}
       <PetModal
         visible={modalVisible}
         petToEdit={selectedPet}
@@ -195,13 +239,11 @@ export default function PetsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.background,
   },
   header: {
-    backgroundColor: Colors.darkBlue,
     paddingTop: 54,
     paddingHorizontal: 20,
-    paddingBottom: 22,
+    paddingBottom: 20,
     borderBottomLeftRadius: 24,
     borderBottomRightRadius: 24,
   },
@@ -211,31 +253,26 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   title: {
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: '800',
-    color: Colors.white,
+    color: '#FFFFFF',
   },
   subtitle: {
     fontSize: 13,
-    color: Colors.textMuted,
+    color: '#94A3B8',
     marginTop: 2,
   },
   addBtn: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: Colors.primary,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#2F6BFF',
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 4,
   },
   list: {
     padding: 16,
-    paddingBottom: 30,
+    paddingBottom: 32,
   },
   center: {
     flex: 1,
@@ -246,10 +283,8 @@ const styles = StyleSheet.create({
   loadingText: {
     marginTop: 12,
     fontSize: 14,
-    color: Colors.textLight,
   },
   errorText: {
-    color: Colors.danger,
     fontSize: 14,
     fontWeight: '600',
     marginTop: 12,
@@ -260,20 +295,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 8,
-    backgroundColor: Colors.primary,
   },
   retryText: {
-    color: Colors.white,
+    color: '#FFFFFF',
     fontWeight: '700',
   },
   card: {
     flexDirection: 'row',
-    backgroundColor: Colors.white,
     borderRadius: 16,
     padding: 14,
     marginBottom: 12,
     alignItems: 'center',
-    shadowColor: Colors.darkBlue,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.08,
     shadowRadius: 8,
@@ -299,10 +331,8 @@ const styles = StyleSheet.create({
   petName: {
     fontSize: 18,
     fontWeight: '800',
-    color: Colors.text,
   },
   genderBadge: {
-    backgroundColor: Colors.primaryLight,
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 6,
@@ -310,11 +340,9 @@ const styles = StyleSheet.create({
   genderBadgeText: {
     fontSize: 10,
     fontWeight: '700',
-    color: Colors.primary,
   },
   breed: {
     fontSize: 13,
-    color: Colors.textLight,
     marginTop: 2,
     marginBottom: 6,
   },
@@ -326,15 +354,12 @@ const styles = StyleSheet.create({
   metaPill: {
     fontSize: 11,
     fontWeight: '600',
-    color: Colors.textBody,
-    backgroundColor: Colors.background,
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 4,
   },
   chipText: {
     fontSize: 11,
-    color: Colors.textMuted,
     marginTop: 2,
   },
   actions: {
@@ -346,13 +371,10 @@ const styles = StyleSheet.create({
     width: 34,
     height: 34,
     borderRadius: 17,
-    backgroundColor: Colors.primaryLight,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  deleteBtn: {
-    backgroundColor: Colors.dangerLight,
-  },
+  deleteBtn: {},
   emptyState: {
     alignItems: 'center',
     paddingVertical: 60,
@@ -361,25 +383,22 @@ const styles = StyleSheet.create({
   emptyTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: Colors.text,
     marginTop: 16,
   },
   emptySubtitle: {
     fontSize: 13,
-    color: Colors.textLight,
     textAlign: 'center',
     marginTop: 6,
     lineHeight: 18,
   },
   createFirstBtn: {
     marginTop: 20,
-    backgroundColor: Colors.primary,
     paddingHorizontal: 20,
     paddingVertical: 12,
     borderRadius: 12,
   },
   createFirstBtnText: {
-    color: Colors.white,
+    color: '#FFFFFF',
     fontSize: 14,
     fontWeight: '700',
   },

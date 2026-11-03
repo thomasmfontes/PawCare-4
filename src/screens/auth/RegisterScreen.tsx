@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   View,
   Text,
@@ -8,12 +8,15 @@ import {
   Platform,
   ScrollView,
   Alert,
+  TouchableWithoutFeedback,
+  Keyboard,
+  TextInput,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import Colors from '../../theme/Colors';
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
 import { useAuth } from '../../hooks/useAuth';
+import { useTheme } from '../../hooks/useTheme';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { AuthStackParamList } from '../../routes/AuthRoutes';
 
@@ -28,7 +31,10 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const passwordInputRef = useRef<TextInput>(null);
+  const confirmPasswordInputRef = useRef<TextInput>(null);
   const { register } = useAuth();
+  const { colors, isDark } = useTheme();
 
   const handleRegister = async () => {
     if (!email.trim() || !password.trim()) {
@@ -63,60 +69,106 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-      style={styles.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
+      style={[styles.container, { backgroundColor: isDark ? colors.background : colors.darkBlue }]}
     >
-      <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
-        <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()}>
-          <Ionicons name="arrow-back" size={24} color={Colors.white} />
-        </TouchableOpacity>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+        <ScrollView
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+          bounces={false}
+        >
+          <TouchableOpacity
+            style={[
+              styles.backBtn,
+              { backgroundColor: isDark ? colors.cardBg : 'rgba(255, 255, 255, 0.15)' },
+            ]}
+            onPress={() => navigation.goBack()}
+          >
+            <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
+          </TouchableOpacity>
 
-        <View style={styles.header}>
-          <Text style={styles.title}>Crie sua conta</Text>
-          <Text style={styles.subtitle}>Junte-se ao PawCare e cuide melhor do seu pet</Text>
-        </View>
-
-        <View style={styles.card}>
-          <CustomInput
-            label="E-mail *"
-            placeholder="seuemail@exemplo.com"
-            keyboardType="email-address"
-            autoCapitalize="none"
-            value={email}
-            onChangeText={setEmail}
-          />
-
-          <CustomInput
-            label="Senha *"
-            placeholder="Mínimo de 6 caracteres"
-            secureTextEntry
-            value={password}
-            onChangeText={setPassword}
-          />
-
-          <CustomInput
-            label="Confirme sua Senha *"
-            placeholder="Repita a senha"
-            secureTextEntry
-            value={confirmPassword}
-            onChangeText={setConfirmPassword}
-          />
-
-          <CustomButton
-            title="Finalizar Cadastro"
-            loading={loading}
-            onPress={handleRegister}
-            style={styles.submitBtn}
-          />
-
-          <View style={styles.footer}>
-            <Text style={styles.footerText}>Já possui uma conta? </Text>
-            <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-              <Text style={styles.loginLink}>Entrar</Text>
-            </TouchableOpacity>
+          <View style={styles.header}>
+            <Text style={styles.title}>Crie sua conta</Text>
+            <Text style={[styles.subtitle, { color: isDark ? colors.textLight : '#94A3B8' }]}>
+              Junte-se ao PawCare e cuide melhor do seu pet
+            </Text>
           </View>
-        </View>
-      </ScrollView>
+
+          <View
+            style={[
+              styles.card,
+              {
+                backgroundColor: colors.cardBg,
+                borderColor: colors.border,
+                borderWidth: isDark ? 1 : 0,
+              },
+            ]}
+          >
+            <CustomInput
+              label="E-mail *"
+              placeholder="seuemail@exemplo.com"
+              keyboardType="email-address"
+              autoCapitalize="none"
+              autoCorrect={false}
+              autoComplete="email"
+              textContentType="emailAddress"
+              returnKeyType="next"
+              onSubmitEditing={() => passwordInputRef.current?.focus()}
+              blurOnSubmit={false}
+              value={email}
+              onChangeText={setEmail}
+            />
+
+            <CustomInput
+              ref={passwordInputRef}
+              label="Senha *"
+              placeholder="Mínimo de 6 caracteres"
+              secureTextEntry
+              autoCapitalize="none"
+              autoCorrect={false}
+              autoComplete="new-password"
+              textContentType="newPassword"
+              returnKeyType="next"
+              onSubmitEditing={() => confirmPasswordInputRef.current?.focus()}
+              blurOnSubmit={false}
+              value={password}
+              onChangeText={setPassword}
+            />
+
+            <CustomInput
+              ref={confirmPasswordInputRef}
+              label="Confirme sua Senha *"
+              placeholder="Repita a senha"
+              secureTextEntry
+              autoCapitalize="none"
+              autoCorrect={false}
+              autoComplete="new-password"
+              textContentType="newPassword"
+              returnKeyType="go"
+              onSubmitEditing={handleRegister}
+              value={confirmPassword}
+              onChangeText={setConfirmPassword}
+            />
+
+            <CustomButton
+              title="Finalizar Cadastro"
+              loading={loading}
+              onPress={handleRegister}
+              style={styles.submitBtn}
+            />
+
+            <View style={styles.footer}>
+              <Text style={[styles.footerText, { color: colors.textLight }]}>Já possui uma conta? </Text>
+              <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+                <Text style={[styles.loginLink, { color: colors.primary }]}>Entrar</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </ScrollView>
+      </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
   );
 }
@@ -124,43 +176,43 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.darkBlue,
   },
   scrollContent: {
     flexGrow: 1,
     justifyContent: 'center',
     padding: 24,
+    paddingTop: Platform.OS === 'android' ? 36 : 50,
+    paddingBottom: 48,
   },
   backBtn: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+    width: 42,
+    height: 42,
+    borderRadius: 21,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 20,
+    marginBottom: 16,
   },
   header: {
-    marginBottom: 28,
+    marginBottom: 24,
   },
   title: {
     fontSize: 28,
     fontWeight: '800',
-    color: Colors.white,
+    color: '#FFFFFF',
+    letterSpacing: 0.5,
   },
   subtitle: {
     fontSize: 14,
-    color: Colors.textMuted,
     marginTop: 6,
+    lineHeight: 20,
   },
   card: {
-    backgroundColor: Colors.white,
-    borderRadius: 20,
+    borderRadius: 22,
     padding: 24,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.15,
-    shadowRadius: 12,
+    shadowRadius: 14,
     elevation: 10,
   },
   submitBtn: {
@@ -174,11 +226,9 @@ const styles = StyleSheet.create({
   },
   footerText: {
     fontSize: 14,
-    color: Colors.textLight,
   },
   loginLink: {
     fontSize: 14,
     fontWeight: '700',
-    color: Colors.primary,
   },
 });
