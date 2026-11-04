@@ -5,16 +5,15 @@
 - Augusto Bonomo - RM 565155
 - Matheus Molina - RM 563399
 
-2. REPOSITÓRIOS DO APP MOBILE:
-- GitHub Classroom (Oficial): https://github.com/AntonioCarvalhoFIAP/challenge-1-thomasmfontes
-- GitHub Pessoal: https://github.com/thomasmfontes/PawCare-4
+2. REPOSITÓRIO DO APP MOBILE:
+- https://github.com/thomasmfontes/PawCare-4
 
 3. PUBLICAÇÃO NO FIREBASE APP DISTRIBUTION:
 - Projeto: PawCare (pawcare-1db6c)
 - Versão: 1.0.0 (APK gerado via EAS Build)
-- Acesso de Tester: E-mail institucional do professor cadastrado como tester.
-- Referência: Commit Hash exibido na tela "Sobre o App".
+- Link Direto da Release (Firebase): https://appdistribution.firebase.google.com/testerapps/1:147878385359:android:b6f9a59732ca548459c9ba/releases/304k3fpl5d5v0?utm_source=firebase-console
+- Acesso de Tester: profantonio.neto@fiap.com.br
+- Referência da Versão: Commit Hash exibido na tela "Sobre o App" (c39ae65)
 
 4. LINK DO VÍDEO DE DEMONSTRAÇÃO (YOUTUBE):
-- https://youtu.be/XCqrmXJfXec (Sprint 3 - Nota 10)
-- [Link da Apresentação Final - Sprint 4]
+- https://youtu.be/eGbsz0p_vHw

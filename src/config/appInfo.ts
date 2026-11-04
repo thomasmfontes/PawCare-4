@@ -3,8 +3,8 @@ import Constants from 'expo-constants';
 export const APP_INFO = {
   name: 'PawCare',
   version: Constants.expoConfig?.version || '1.0.0',
-  // O hash do commit de referência da versão publicada
-  commitHash: (Constants.expoConfig?.extra as any)?.commitHash || '10f8f44',
+  // O hash do commit de referência da versão publicada (conforme APK no Firebase e vídeo)
+  commitHash: 'c39ae65',
   sprint: 'Sprint 4 - Entrega Final',
   institution: 'FIAP',
   course: 'Mobile Application Development',

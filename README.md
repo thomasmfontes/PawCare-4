@@ -1,6 +1,5 @@
 # PawCare 🐾 - Mobile Application
 
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/6oXxJ3IU)
 
 <p align="center">
   <img src="https://img.icons8.com/color/120/000000/dog.png" alt="PawCare Logo" width="120px" style="border-radius: 20%;" />
@@ -32,9 +31,8 @@
 
 ---
 
-## 🎥 Links dos Vídeos de Apresentação
-* **Sprint 4 (Vídeo Final):** *(Link da apresentação final gravada no YouTube)*
-* **Sprint 3 (Entrega Anterior - Nota 10):** [Assista no YouTube](https://youtu.be/XCqrmXJfXec?si=MtY9EM8bCtT9PeAC)
+## 🎥 Vídeo de Apresentação e Demonstração
+* **Vídeo Final (Sprint 4):** [Assista no YouTube](https://youtu.be/eGbsz0p_vHw)
 
 ---
 
@@ -43,11 +41,11 @@
 | Requisito do Edital | Pontos | Implementação no PawCare | Arquivos de Referência |
 | :--- | :---: | :--- | :--- |
 | **1. Telas Funcionais** | **20 pts** | **Todas as telas são 100% funcionais** com utilidade prática:<br>• **Home:** Métricas em tempo real e atalhos rápidos.<br>• **Pets:** CRUD completo com persistência no Firebase.<br>• **Vacinas:** CRUD e controle de status de imunização.<br>• **Histórico:** Prontuário médico interativo com adição de eventos clínicos e filtros.<br>• **Cuidados:** Checklist de hábitos diários com progresso e persistência.<br>• **Veterinários:** Agendamento rápido de consultas, chamadas e mapas.<br>• **Sobre:** Dados da publicação e hash do commit. | `src/screens/app/` (Todas as telas funcionais) |
-| **2. Publicação do Aplicativo** | **20 pts** | • Compilação do APK nativo via EAS Build (`preview`).<br>• Publicação no **Firebase App Distribution** com convite de tester enviado ao e-mail institucional do professor.<br>• **Tela "Sobre o App"** exibindo explicitamente o **Hash do Commit** de referência da versão publicada, dados da equipe e RMs. | `src/screens/app/AboutScreen.tsx`<br>`src/config/appInfo.ts`<br>`eas.json` |
+| **2. Publicação do Aplicativo** | **20 pts** | • Compilação do APK nativo via EAS Build (`preview`).<br>• Publicação no **Firebase App Distribution** com convite de tester enviado ao professor (`profantonio.neto@fiap.com.br`) e [link direto da release](https://appdistribution.firebase.google.com/testerapps/1:147878385359:android:b6f9a59732ca548459c9ba/releases/304k3fpl5d5v0?utm_source=firebase-console).<br>• **Tela "Sobre o App"** exibindo explicitamente o **Hash do Commit** (`c39ae65`) de referência da versão publicada, dados da equipe e RMs. | `src/screens/app/AboutScreen.tsx`<br>`src/config/appInfo.ts`<br>`eas.json` |
 | **3. Notificações (Locais Reais)** | **20 pts** | Notificações de sistema reais com `expo-notifications` disparadas por eventos do sistema:<br>• Confirmação e agendamento de dose ao cadastrar vacina.<br>• Lembretes de cuidados diários.<br>• Confirmação de agendamento veterinário.<br>• Navegação direta (deep linking) ao tocar na notificação. | `src/services/notificationService.ts`<br>`src/hooks/useNotifications.ts`<br>`App.tsx` |
 | **4. Arquitetura e Organização** | **20 pts** | Separação estrita em camadas:<br>• **UI:** `screens/` e `components/`<br>• **Regras de Negócio e Hooks:** `hooks/`<br>• **Camada de Dados / APIs:** `services/`<br>• **Contextos Globais:** `contexts/`<br>TanStack Query isolado da camada de apresentação; tipagem TypeScript 100% estrita sem erros. | `src/` (Arquitetura modular em camadas) |
 | **5. Suporte a Tema Claro / Escuro** | *(Penalidade VI)* | Implementação de `ThemeContext` completo com persistência (`AsyncStorage`), suporte aos modos **Claro**, **Escuro** e **Sistema**, e alternador dinâmico na interface. | `src/contexts/ThemeContext.tsx`<br>`src/theme/Colors.ts`<br>`src/hooks/useTheme.ts` |
-| **6. Entrega via Classroom & Pessoal** | *(Penalidade I)* | Configuração multi-remote no Git para sincronização simultânea com o **GitHub Classroom** e com o **Repositório Pessoal**, mantendo histórico evolutivo. | Git Remotes (`classroom` e `origin`) |
+| **6. Repositório Oficial do Projeto** | *(Critério de Entrega)* | Código-fonte versionado no GitHub com histórico estruturado de commits e documentação completa. | [GitHub PawCare-4](https://github.com/thomasmfontes/PawCare-4) |
 
 ---
 
@@ -136,7 +134,7 @@ O aplicativo conta com suporte nativo a múltiplos modos de exibição:
 
 1. **Clone o repositório:**
    ```bash
-   git clone https://github.com/AntonioCarvalhoFIAP/challenge-1-thomasmfontes.git
+   git clone https://github.com/thomasmfontes/PawCare-4.git
    cd PawCare
    ```
 
