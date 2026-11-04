@@ -17,16 +17,14 @@ export default function Loader({ message = 'Carregando dados...' }: LoaderProps)
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 24,
-    backgroundColor: Colors.background,
   },
   text: {
     marginTop: 12,
     fontSize: 14,
-    color: Colors.textLight,
+    color: '#FFFFFF',
     fontWeight: '500',
   },
 });

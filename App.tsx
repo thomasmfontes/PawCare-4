@@ -6,8 +6,11 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer, NavigationContainerRef } from '@react-navigation/native';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import * as Notifications from 'expo-notifications';
+import * as SplashScreen from 'expo-splash-screen';
 
-import { AuthProvider } from './src/hooks/useAuth';
+SplashScreen.preventAutoHideAsync().catch(() => {});
+
+import { AuthProvider, useAuth } from './src/hooks/useAuth';
 import { ThemeProvider, useTheme } from './src/contexts/ThemeContext';
 import Routes from './src/routes';
 
@@ -30,6 +33,13 @@ const queryClient = new QueryClient({
 });
 
 function AppContent() {
+  const { isLoading } = useAuth();
+
+  useEffect(() => {
+    if (!isLoading) {
+      SplashScreen.hideAsync().catch(() => {});
+    }
+  }, [isLoading]);
   const { isDark } = useTheme();
   const navigationRef = useRef<NavigationContainerRef<any>>(null);
 

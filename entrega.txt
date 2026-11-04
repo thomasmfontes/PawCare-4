@@ -1,12 +1,20 @@
-1. INTEGRANTES DO GRUPO:
+1. INTEGRANTES DO GRUPO (FIAP):
 - Thomas Fontes - RM 562254
 - Gabriel Maciel - RM 562795
 - Vitória Rodrigues - RM 565160
 - Augusto Bonomo - RM 565155
 - Matheus Molina - RM 563399
 
-2. Repositório do App Mobile:
-   https://github.com/AntonioCarvalhoFIAP/challenge-1-thomasmfontes
+2. REPOSITÓRIOS DO APP MOBILE:
+- GitHub Classroom (Oficial): https://github.com/AntonioCarvalhoFIAP/challenge-1-thomasmfontes
+- GitHub Pessoal: https://github.com/thomasmfontes/PawCare-4
 
-3. Link do Vídeo de Demonstração (YouTube):
-   https://youtu.be/XCqrmXJfXec?si=MtY9EM8bCtT9PeAC
+3. PUBLICAÇÃO NO FIREBASE APP DISTRIBUTION:
+- Projeto: PawCare (pawcare-1db6c)
+- Versão: 1.0.0 (APK gerado via EAS Build)
+- Acesso de Tester: E-mail institucional do professor cadastrado como tester.
+- Referência: Commit Hash exibido na tela "Sobre o App".
+
+4. LINK DO VÍDEO DE DEMONSTRAÇÃO (YOUTUBE):
+- https://youtu.be/XCqrmXJfXec (Sprint 3 - Nota 10)
+- [Link da Apresentação Final - Sprint 4]

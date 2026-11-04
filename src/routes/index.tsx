@@ -10,11 +10,7 @@ export default function Routes() {
   const { isAuthenticated, isLoading } = useAuth();
 
   if (isLoading) {
-    return (
-      <View style={styles.loadingContainer}>
-        <Loader message="Iniciando o PawCare..." />
-      </View>
-    );
+    return null;
   }
 
   return isAuthenticated ? <AppRoutes /> : <AuthRoutes />;

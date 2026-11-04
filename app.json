@@ -4,23 +4,30 @@
     "slug": "pawcare",
     "version": "1.0.0",
     "orientation": "portrait",
+    "icon": "./assets/icon.png",
     "scheme": "pawcare",
     "userInterfaceStyle": "automatic",
-    "splash": {
-      "backgroundColor": "#0D2B52"
-    },
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "package": "com.thomasfontes.pawcare",
       "adaptiveIcon": {
-        "backgroundColor": "#0D2B52"
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#022253"
       },
       "softwareKeyboardLayoutMode": "resize"
     },
     "plugins": [
-      "expo-status-bar",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#022253",
+          "image": "./assets/splash-icon.png",
+          "imageWidth": 200,
+          "resizeMode": "contain"
+        }
+      ],
       [
         "expo-image-picker",
         {
